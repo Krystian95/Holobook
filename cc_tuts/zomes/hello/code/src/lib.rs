@@ -43,7 +43,7 @@ mod hello_zome {
             timestamp
         };
 
-        let entry = Entry::App("regitered_user".into(), registered_user.into());
+        let entry = Entry::App("registered_user".into(), registered_user.into());
         let address = hdk::commit_entry(&entry)?;
 
         hdk::link_entries(&dna_hash, &address, "registered_user", "")?;

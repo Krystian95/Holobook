@@ -1,5 +1,7 @@
 bridges = []
 persistence_dir = ''
+ui_bundles = []
+ui_interfaces = []
 
 [[agents]]
 id = 'hc-run-agent'
@@ -9,42 +11,28 @@ public_address = 'HcSciaDXrXkqxwv7gukMChvazIuscvcrk457t8n88cmo95en4sPCEdDKvj4ucj
 test_agent = true
 
 [[dnas]]
-file = 'dist/cc_tuts.dna.json'
-hash = 'QmXayr6HwonU8tm7UrkKjQf13zL5g6ifRs1F4Qr1vNXuzj'
-id = '__cc_tuts'
+file = '/Users/cristian/holochain/Holochain---P2P-project/dist/Holochain---P2P-project.dna.json'
+hash = 'QmXuPFimMCoYQrXqX9vr1vve8JtpQ7smfkw1LugqEhyWTr'
+id = 'hc-run-dna'
 
 [[instances]]
 agent = 'hc-run-agent'
-dna = '__cc_tuts'
-id = '__cc_tuts'
+dna = 'hc-run-dna'
+id = 'test-instance'
 
 [instances.storage]
 type = 'memory'
 
 [[interfaces]]
-admin = false
-choose_free_port = false
-id = 'cc_tuts_ui'
+admin = true
+id = 'websocket-interface'
 
 [[interfaces.instances]]
-alias = 'test-instance'
-id = '__cc_tuts'
+id = 'test-instance'
 
 [interfaces.driver]
-port = 50000
-type = 'websocket'
-
-[[ui_bundles]]
-id = 'cc_tuts_ui'
-root_dir = '../gui'
-
-[[ui_interfaces]]
-bind_address = '127.0.0.1'
-bundle = 'cc_tuts_ui'
-dna_interface = 'cc_tuts_ui'
-id = 'cc_tuts_ui'
 port = 8888
-reroute_to_root = false
+type = 'websocket'
 
 [logger]
 state_dump = true
