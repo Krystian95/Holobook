@@ -2,14 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0c2adec3-e32e-4641-b0cb-141f39e1c8cc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/conductor-config.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cc_tuts/bundle.toml" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/bundle.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cc_tuts/conductor-config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/conductor-config.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cc_tuts/launcher/resources/alice.sh" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/launcher/resources/alice.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cc_tuts/launcher/resources/bob.sh" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/launcher/resources/bob.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cc_tuts/launcher/resources/holochain.sh" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/launcher/resources/holochain.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cc_tuts/zomes/hello/code/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/zomes/hello/code/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cc_tuts/zomes/hello/conductor-config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/zomes/hello/conductor-config.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/hello.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/hello.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/gui/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -60,7 +58,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1608483673587</updated>
-      <workItem from="1608483675220" duration="1224000" />
+      <workItem from="1608483675220" duration="8632000" />
     </task>
     <servers />
   </component>

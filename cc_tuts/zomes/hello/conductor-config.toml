@@ -11,8 +11,8 @@ public_address = 'HcScjN8wBwrn3tuyg89aab3a69xsIgdzmX5P9537BqQZ5A7TEZu7qCY4Xzzjhm
 test_agent = true
 
 [[dnas]]
-file = '/Users/cristian/holochain/coreconcepts/cc_tuts/zomes/hello/dist/hello.dna.json'
-hash = 'QmSNTjNgSVYv5m2HFbki2UPAM8MbPxx4o2scPQcwY5i5BY'
+file = '/Users/cristian/holochain/Holochain---P2P-project/cc_tuts/zomes/hello/dist/hello.dna.json'
+hash = 'QmVgkvgEBPr14dXMWFWYZDBtGky6yT1T3JzUzApZPHyQsD'
 id = 'hc-run-dna'
 
 [[instances]]

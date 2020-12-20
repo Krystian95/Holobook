@@ -13,7 +13,7 @@
     />
 </head>
 
-<body onload="get_agent_id(); get_dna_hash()">
+<body onload="get_agent_id(); get_dna_hash(); register_me()">
 
 <button onclick="hello()" type="button">Say Hello</button>
 <div>Response: <span id="output"></span></div>
@@ -29,7 +29,8 @@
 
 <ul id="posts_output"></ul>
 
-<h3>Retrieve Users</h3>
+<h3>Users</h3>
+<!--<button onclick="register_me()" type="button">Register me</button>-->
 <button onclick="retrieve_users()" type="button">Show Users</button>
 
 <ul id="users_output"></ul>

@@ -31,6 +31,15 @@ function create_post() {
     });
 }
 
+function register_me() {
+    const timestamp = Date.now();
+    holochain_connection.then(({callZome, close}) => {
+        callZome('test-instance', 'hello', 'register_me')({
+            timestamp: timestamp
+        }).then(result => show_output(result, 'address_output'));
+    });
+}
+
 function retrieve_posts() {
     var address = document.getElementById('address_in').value.trim();
     holochain_connection.then(({callZome, close}) => {
