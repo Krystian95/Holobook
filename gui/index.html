@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+
+    <title>Hello GUI</title>
+    <meta name="description" content="GUI for a Holochain app"/>
+
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css"
+    />
+</head>
+
+<body onload="get_agent_id(); get_dna_hash()">
+
+<button onclick="hello()" type="button">Say Hello</button>
+<div>Response: <span id="output"></span></div>
+
+<h3>Create Post</h3>
+<textarea id="post" placeholder="Enter a message :)"></textarea>
+<button onclick="create_post()" type="button">Submit Post</button>
+<div>Address: <span id="address_output"></span></div>
+
+<h3>Retrieve Posts</h3>
+<input type="text" id="address_in" placeholder="Enter the agent id">
+<button onclick="retrieve_posts()" type="button">Show Posts</button>
+
+<ul id="posts_output"></ul>
+
+<h3>Retrieve Users</h3>
+<button onclick="retrieve_posts()" type="button">Show Users</button>
+
+<ul id="users_output"></ul>
+
+<h3>Agent ID:</h3>
+<div id="agent_id"></div>
+
+<h3>DNA hash:</h3>
+<div id="dna_hash"></div>
+
+<script
+        type="text/javascript"
+        src="hc-web-client-0.5.3/hc-web-client-0.5.3.browser.min.js"
+></script>
+
+<script type="text/javascript" src="hello.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+[package]
+name = "mashup"
+version = "0.1.12" # remember to update html_root_url
+authors = ["David Tolnay <dtolnay@gmail.com>"]
+license = "MIT OR Apache-2.0"
+description = "Concatenate identifiers in a macro invocation"
+repository = "https://github.com/dtolnay/mashup"
+documentation = "https://docs.rs/mashup"
+readme = "README.md"
+
+[dependencies]
+proc-macro-hack = "0.4"
+mashup-impl = { version = "=0.1.12", path = "impl" }
+
+[workspace]
+members = ["impl"]
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
