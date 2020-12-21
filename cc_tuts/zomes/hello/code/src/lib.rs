@@ -18,7 +18,7 @@ pub struct Post {
 #[derive(Serialize, Deserialize, Debug, DefaultJson, Clone)]
 pub struct RegisteredUser {
     nickname: String,
-    user_address: String,
+    user_address: Address,
     timestamp: u64,
 }
 
@@ -38,19 +38,21 @@ mod hello_zome {
     }
 
     #[zome_fn("hc_public")]
-    pub fn register_me(timestamp: u64) -> ZomeApiResult<Address> {
-        let dna_hash = hdk::DNA_ADDRESS.clone().into();
+    pub fn register_me(nickname: String, timestamp: u64) -> ZomeApiResult<Address> {
+        //let dna_hash = hdk::DNA_ADDRESS.clone().into();
+        //let agent_address = hdk::AGENT_ADDRESS.clone().into();
+        let public_token_address = hdk::PUBLIC_TOKEN.clone().into();
 
         let registered_user = RegisteredUser {
-            nickname: hdk::AGENT_ID_STR.clone().into(),
-            user_address: hdk::AGENT_ADDRESS.clone().into(),
+            nickname,
+            user_address: hdk::AGENT_ADDRESS.clone(),
             timestamp
         };
 
         let entry = Entry::App("registered_user".into(), registered_user.into());
         let entry_address = hdk::commit_entry(&entry)?;
 
-        hdk::link_entries(&dna_hash, &entry_address, "registered_user", "")?;
+        hdk::link_entries(&public_token_address, &entry_address, "registered_user", "")?;
 
         Ok(entry_address)
     }
@@ -98,6 +100,11 @@ mod hello_zome {
     #[zome_fn("hc_public")]
     pub fn get_dna_hash() -> ZomeApiResult<Address> {
         Ok(hdk::DNA_ADDRESS.clone())
+    }
+
+    #[zome_fn("hc_public")]
+    pub fn get_agent() -> ZomeApiResult<String> {
+        Ok(hdk::AGENT_ID_STR.to_string().clone())
     }
 
     #[entry_def]

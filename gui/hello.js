@@ -32,11 +32,21 @@ function create_post() {
 }
 
 function register_me() {
-    const timestamp = Date.now();
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'register_me')({
-            timestamp: timestamp
-        }).then(result => show_output(result, 'address_output'));
+        callZome('test-instance', 'hello', 'get_agent')({}).then(result => {
+                var json = JSON.parse(result);
+                var json_inner = JSON.parse(json.Ok);
+                var nickname = json_inner.nick;
+
+                const timestamp = Date.now();
+                holochain_connection.then(({callZome, close}) => {
+                    callZome('test-instance', 'hello', 'register_me')({
+                        nickname: nickname,
+                        timestamp: timestamp
+                    }).then(result => show_output(result, 'address_output'));
+                });
+            }
+        );
     });
 }
 
@@ -59,6 +69,17 @@ function get_agent_id() {
     holochain_connection.then(({callZome, close}) => {
         callZome('test-instance', 'hello', 'get_agent_id')({}).then(result =>
             show_output(result, 'agent_id'),
+        );
+    });
+}
+
+function get_agent() {
+    holochain_connection.then(({callZome, close}) => {
+        callZome('test-instance', 'hello', 'get_agent')({}).then(result => {
+                var json = JSON.parse(result);
+                var json_inner = JSON.parse(json.Ok);
+                console.log(json_inner.nick);
+            }
         );
     });
 }
