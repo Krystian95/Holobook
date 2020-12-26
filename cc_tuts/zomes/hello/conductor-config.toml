@@ -12,7 +12,7 @@ test_agent = true
 
 [[dnas]]
 file = '/Users/cristian/holochain/Holochain---P2P-project/cc_tuts/zomes/hello/dist/hello.dna.json'
-hash = 'QmWbAhjcaWw8eNZAbbc63WSxabJatqqvXMAPHRRPaKkeAt'
+hash = 'QmYzN5ujCfe5okqbiVcK46wuB4EJqkeLKVwgC1F6PFcqFM'
 id = 'hc-run-dna'
 
 [[instances]]

@@ -3,11 +3,6 @@
 use hdk::prelude::*;
 use hdk_proc_macros::zome;
 
-// see https://developer.holochain.org/api/0.0.51-alpha1/hdk/ for info on using the hdk library
-
-// This is a sample zome that defines an entry type "MyEntry" that can be committed to the
-// agent's chain via the exposed function create_my_entry
-
 #[derive(Serialize, Deserialize, Debug, DefaultJson, Clone)]
 pub struct Post {
     message: String,
@@ -25,7 +20,9 @@ pub struct RegisteredUser {
 #[zome]
 mod hello_zome {
     #[init]
-    pub fn init() { Ok(()) }
+    fn init() {
+        Ok(())
+    }
 
     #[validate_agent]
     pub fn validate_agent(validation_data: EntryValidationData<AgentId>) {
@@ -39,22 +36,22 @@ mod hello_zome {
 
     #[zome_fn("hc_public")]
     pub fn register_me(nickname: String, timestamp: u64) -> ZomeApiResult<Address> {
-        //let dna_hash = hdk::DNA_ADDRESS.clone().into();
-        //let agent_address = hdk::AGENT_ADDRESS.clone().into();
-        let public_token_address = hdk::PUBLIC_TOKEN.clone().into();
-
         let registered_user = RegisteredUser {
             nickname,
             user_address: hdk::AGENT_ADDRESS.clone(),
-            timestamp
+            timestamp,
         };
 
-        let entry = Entry::App("registered_user".into(), registered_user.into());
-        let entry_address = hdk::commit_entry(&entry)?;
+        let registered_user_entry = Entry::App("registered_user".into(), registered_user.into());
+        let registered_user_entry_address = hdk::commit_entry(&registered_user_entry)?;
 
-        hdk::link_entries(&public_token_address, &entry_address, "registered_user", "")?;
+        // Create the anchor entry and commit it to the chain.
+        let anchor_entry = Entry::App("anchor".into(), "registered_user".into());
+        let anchor_address = hdk::commit_entry(&anchor_entry)?;
+        // Link the anchor to the game.
+        hdk::link_entries(&anchor_address, &registered_user_entry_address, "has_registered_user", "")?;
 
-        Ok(entry_address)
+        Ok(registered_user_entry_address)
     }
 
     #[zome_fn("hc_public")]
@@ -66,10 +63,10 @@ mod hello_zome {
         };
         let agent_address = hdk::AGENT_ADDRESS.clone().into();
         let entry = Entry::App("post".into(), post.into());
-        let entry_address = hdk::commit_entry(&entry)?;
-        hdk::link_entries(&agent_address, &entry_address, "author_post", "")?;
+        let address = hdk::commit_entry(&entry)?;
+        hdk::link_entries(&agent_address, &address, "author_post", "")?;
 
-        Ok(entry_address)
+        Ok(address)
     }
 
     #[zome_fn("hc_public")]
@@ -83,11 +80,16 @@ mod hello_zome {
 
     #[zome_fn("hc_public")]
     pub fn retrieve_users() -> ZomeApiResult<Vec<RegisteredUser>> {
-        let dna_hash = hdk::DNA_ADDRESS.clone().into();
-
+        let anchor_entry = Entry::App("anchor".into(), "registered_user".into());
+        let anchor_address = hdk::commit_entry(&anchor_entry)?;
+        // Now search for all links from the anchors address
+        // that are called `has_game`.
+        // This call also loads the `Entry` into the `Game` type.
         hdk::utils::get_links_and_load_type(
-            &dna_hash,
-            LinkMatch::Exactly("registered_user"),
+            &anchor_address,
+            // Match the link_type exactly has_game.
+            LinkMatch::Exactly("has_registered_user"),
+            // Match any tag.
             LinkMatch::Any,
         )
     }
@@ -108,11 +110,43 @@ mod hello_zome {
     }
 
     #[entry_def]
+    fn anchor_entry_def() -> ValidatingEntryType {
+        entry!(
+            name: "anchor",
+            description: "Anchor to all the links",
+            sharing: Sharing::Public,
+            validation_package: || {
+                hdk::ValidationPackageDefinition::Entry
+            },
+            validation: |_validation_data: hdk::EntryValidationData<String>| {
+                Ok(())
+            },
+            // Anchor will link to all games.
+            // It is a good way for players to
+            // find which games are available.
+            links: [
+            to!(
+                // Link to the game entry
+                "registered_user",
+                // This link is a has_game link
+                link_type: "has_registered_user",
+               validation_package: || {
+                   hdk::ValidationPackageDefinition::Entry
+               },
+               validation: |_validation_data: hdk::LinkValidationData| {
+                   Ok(())
+               }
+            )
+            ]
+        )
+    }
+
+    #[entry_def]
     fn post_entry_def() -> ValidatingEntryType {
         entry!(
             name: "post",
             description: "A blog post",
-            sharing: Sharing::Private,
+            sharing: Sharing::Public,
             validation_package: || {
                 hdk::ValidationPackageDefinition::Entry
             },

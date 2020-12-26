@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/cc_tuts/zomes/hello/code/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/zomes/hello/code/src/lib.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cc_tuts/zomes/hello/conductor-config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/zomes/hello/conductor-config.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/hello.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/hello.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/gui/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,6 +61,8 @@
       <workItem from="1608483675220" duration="8632000" />
       <workItem from="1608573325507" duration="226000" />
       <workItem from="1608574457307" duration="2916000" />
+      <workItem from="1608662755265" duration="2300000" />
+      <workItem from="1608746113232" duration="2667000" />
     </task>
     <servers />
   </component>
