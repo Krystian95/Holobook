@@ -118,9 +118,11 @@ function display_users(result) {
     if (output.Ok) {
         var users = output.Ok.sort((a, b) => a.timestamp - b.timestamp);
         for (user of users) {
-            var node = document.createElement("LI");
-            var textnode = document.createTextNode(user.nickname);
-            node.appendChild(textnode);
+            console.log(user.nickname + ": " + user.user_address);
+            var node = document.createElement("li");
+            var div = document.createElement('div');
+            div.innerHTML = '<a href="#!" data-user_address="' + user.user_address + '">' + user.nickname + '</a>'
+            node.appendChild(div);
             list.appendChild(node);
         }
     } else {

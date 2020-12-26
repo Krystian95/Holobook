@@ -3,12 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0c2adec3-e32e-4641-b0cb-141f39e1c8cc" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cc_tuts/bundle.toml" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/bundle.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cc_tuts/conductor-config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/conductor-config.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cc_tuts/zomes/hello/code/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/zomes/hello/code/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cc_tuts/zomes/hello/conductor-config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/zomes/hello/conductor-config.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/hello.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/hello.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/gui/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,6 +58,7 @@
       <workItem from="1608574457307" duration="2916000" />
       <workItem from="1608662755265" duration="2300000" />
       <workItem from="1608746113232" duration="2667000" />
+      <workItem from="1609003848904" duration="897000" />
     </task>
     <servers />
   </component>
