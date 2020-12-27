@@ -1,8 +1,11 @@
-var holochain_connection = holochainclient.connect();
-var agent_nickname = $.Deferred();
-var registered_users = $.Deferred();
-var user_is_registered = $.Deferred();
-var show_users = $.Deferred();
+const holochain_connection = holochainclient.connect();
+
+const agent_nickname_callback = $.Deferred();
+let registered_users = $.Deferred();
+const user_is_registered = $.Deferred();
+const show_users = $.Deferred();
+
+let angent_nickname;
 
 // Console function
 
@@ -13,6 +16,21 @@ function console_output(result) {
     } else {
         console.log(output.Err.Internal);
     }
+}
+
+function convert_timestamp(timestamp) {
+    var options = {
+        'weekday': 'long',
+        'day': '2-digit',
+        'month': 'long',
+        'year': 'numeric',
+        'hour12': false,
+        'hourCycle': 'h24',
+        'hour': '2-digit',
+        'minute': '2-digit',
+        'second': '2-digit'
+    };
+    return new Date(timestamp).toLocaleString('it-IT', options);
 }
 
 // Zome calls
@@ -42,7 +60,7 @@ async function get_agent_nickname() {
         callZome('test-instance', 'hello', 'get_agent_nickname')({}).then(result => {
                 var json = JSON.parse(result);
                 var json_inner = JSON.parse(json.Ok);
-                agent_nickname.resolve(json_inner.nick);
+            agent_nickname_callback.resolve(json_inner.nick);
             }
         );
     });
@@ -55,12 +73,12 @@ $('form[name="post-form"]').submit(function (e) {
     const post_type = $(this).find('input[name="post-type"]:checked').val();
     const timestamp = Date.now();
 
-    console.log(timestamp + " " + post_type + " " + post_text);
+    console.log(timestamp + " " + post_type + " " + post_text + " " + angent_nickname);
 
     if (post_type == "public") {
-        create_public_post(post_text, timestamp)
+        create_public_post(post_text, timestamp, angent_nickname);
     } else if (post_type == "private") {
-        create_private_post(post_text, timestamp)
+        create_private_post(post_text, timestamp, angent_nickname);
     }
 });
 
@@ -69,24 +87,29 @@ function resetPostForm() {
     $('form[name="post-form"]').find('input[name="post-type"][id="public"]').prop("checked", true);
 }
 
-function create_public_post(post_text, timestamp) {
+function create_public_post(post_text, timestamp, author_nickname) {
     holochain_connection.then(({callZome, close}) => {
         callZome('test-instance', 'hello', 'create_public_post')({
             text: post_text,
             timestamp: timestamp,
+            author_nickname: author_nickname
         }).then(result => {
             console.log("Public post created");
             console_output(result);
             resetPostForm();
+            setTimeout(() => {
+                retrieve_public_posts();
+            }, 3000);
         });
     });
 }
 
-function create_private_post(post_text, timestamp) {
+function create_private_post(post_text, timestamp, author_nickname) {
     holochain_connection.then(({callZome, close}) => {
         callZome('test-instance', 'hello', 'create_private_post')({
             text: post_text,
             timestamp: timestamp,
+            author_nickname: author_nickname
         }).then(result => {
             console.log("Private post created");
             console_output(result);
@@ -95,26 +118,23 @@ function create_private_post(post_text, timestamp) {
     });
 }
 
-function retrieve_posts() {
-    var address = document.getElementById('address_in').value.trim();
+function retrieve_public_posts() {
+    console.log("Retriving public post");
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'retrieve_posts')({
-            agent_address: address,
-        }).then(result => display_posts(result));
+        callZome('test-instance', 'hello', 'retrieve_public_posts')({}).then(result => display_posts(result));
     });
 }
 
 function display_posts(result) {
-    var list = document.getElementById('posts_output');
-    list.innerHTML = "";
-    var output = JSON.parse(result);
+    console.log("Displaying posts...");
+    $('#public_posts').empty();
+    const output = JSON.parse(result);
     if (output.Ok) {
-        var posts = output.Ok.sort((a, b) => a.timestamp - b.timestamp);
+        const posts = output.Ok.sort((a, b) => b.timestamp - a.timestamp);
+        let post;
         for (post of posts) {
-            var node = document.createElement("LI");
-            var textnode = document.createTextNode(post.message);
-            node.appendChild(textnode);
-            list.appendChild(node);
+            var post_element = '<div>' + post.text + ' (' + convert_timestamp(post.timestamp) + ') - ' + post.author_nickname + '</div>';
+            $('#public_posts').append(post_element);
         }
     } else {
         alert(output.Err.Internal);
@@ -142,19 +162,15 @@ async function register_me(nickname) {
 }
 
 async function display_users(result) {
-    var list = document.getElementById('users_output');
-    list.innerHTML = "";
+    $('#users_list').empty();
     var output = JSON.parse(result);
     if (output.Ok) {
         console.log("Displaying users...");
-        var users = output.Ok.sort((a, b) => a.timestamp - b.timestamp);
+        var users = output.Ok.sort((a, b) => b.timestamp - a.timestamp);
         for (user of users) {
             /*console.log(user.nickname + ": " + user.user_address);*/
-            var node = document.createElement("li");
-            var div = document.createElement('div');
-            div.innerHTML = '<a href="#!" data-user_address="' + user.user_address + '">' + user.nickname + '</a>'
-            node.appendChild(div);
-            list.appendChild(node);
+            var user_element = '<div><a href="#!" data-user_address="' + user.user_address + '">' + user.nickname + '</a></div>';
+            $('#users_list').append(user_element);
         }
     } else {
         alert(output.Err.Internal);
@@ -172,8 +188,12 @@ async function set_agent_is_registered(agent_nickname, registered_users) {
 }
 
 $(document).ready(function () {
+
+    retrieve_public_posts();
+
     get_agent_nickname();
-    $.when(agent_nickname).done(function (result_agent_nickname) {
+    $.when(agent_nickname_callback).done(function (result_agent_nickname) {
+        angent_nickname = result_agent_nickname;
         retrieve_users();
         $.when(registered_users).done(function (result_registered_users) {
             var result = JSON.parse(result_registered_users);

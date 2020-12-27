@@ -8,7 +8,8 @@ pub struct Post {
     text: String,
     post_type: String,
     timestamp: u64,
-    author_id: Address,
+    author_address: Address,
+    author_nickname: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, DefaultJson, Clone)]
@@ -50,13 +51,14 @@ mod hello_zome {
     }
 
     #[zome_fn("hc_public")]
-    pub fn create_public_post(text: String, timestamp: u64) -> ZomeApiResult<Address> {
+    pub fn create_public_post(text: String, timestamp: u64, author_nickname: String) -> ZomeApiResult<Address> {
         let post_type = "public".to_string();
         let post = Post {
             text,
             post_type,
             timestamp,
-            author_id: hdk::AGENT_ADDRESS.clone(),
+            author_address: hdk::AGENT_ADDRESS.clone(),
+            author_nickname
         };
 
         let post_entry = Entry::App("public_post".into(), post.into());
@@ -71,13 +73,14 @@ mod hello_zome {
     }
 
     #[zome_fn("hc_public")]
-    pub fn create_private_post(text: String, timestamp: u64) -> ZomeApiResult<Address> {
+    pub fn create_private_post(text: String, timestamp: u64, author_nickname: String) -> ZomeApiResult<Address> {
         let post_type = "private".to_string();
         let post = Post {
             text,
             post_type,
             timestamp,
-            author_id: hdk::AGENT_ADDRESS.clone(),
+            author_address: hdk::AGENT_ADDRESS.clone(),
+            author_nickname
         };
 
         let post_entry = Entry::App("private_post".into(), post.into());
