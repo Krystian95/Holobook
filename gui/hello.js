@@ -4,71 +4,35 @@ var registered_users = $.Deferred();
 var user_is_registered = $.Deferred();
 var show_users = $.Deferred();
 
-// Render functions
-function show_output(result, id) {
-    var el = document.getElementById(id);
+// Console function
+
+function console_output(result) {
     var output = JSON.parse(result);
     if (output.Ok) {
-        el.textContent = output.Ok;
+        console.log(output.Ok);
     } else {
-        alert(output.Err.Internal);
+        console.log(output.Err.Internal);
     }
 }
 
 // Zome calls
 
-function hello() {
+function get_agent_id() {
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'hello_holo')({args: {}}).then(result =>
-            show_output(result, 'output'),
+        callZome('test-instance', 'hello', 'get_agent_id')({}).then(result => {
+                var output = JSON.parse(result);
+                $('#agent_id').text(output.Ok);
+            }
         );
     });
 }
 
-function create_post() {
-    const message = document.getElementById('post').value;
-    const timestamp = Date.now();
+function get_dna_hash() {
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'create_post')({
-            message: message,
-            timestamp: timestamp,
-        }).then(result => show_output(result, 'address_output'));
-    });
-}
-
-function retrieve_posts() {
-    var address = document.getElementById('address_in').value.trim();
-    holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'retrieve_posts')({
-            agent_address: address,
-        }).then(result => display_posts(result));
-    });
-}
-
-async function register_me(nickname) {
-    holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'register_me')({
-            nickname: nickname,
-            timestamp: Date.now()
-        }).then(result => {
-            console.log("Registered!");
-            show_users.resolve(true);
-        });
-    });
-}
-
-async function retrieve_users() {
-    holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'retrieve_users')({}).then(result => {
-            registered_users.resolve(result);
-        });
-    });
-}
-
-function get_agent_id() {
-    holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'get_agent_id')({}).then(result =>
-            show_output(result, 'agent_id'),
+        callZome('test-instance', 'hello', 'get_dna_hash')({}).then(result => {
+                var output = JSON.parse(result);
+                $('#dna_hash').text(output.Ok);
+            }
         );
     });
 }
@@ -84,11 +48,59 @@ async function get_agent_nickname() {
     });
 }
 
-function get_dna_hash() {
+$('form[name="post-form"]').submit(function (e) {
+    e.preventDefault();
+
+    const post_text = $(this).find('textarea[name="post-text"]').val();
+    const post_type = $(this).find('input[name="post-type"]:checked').val();
+    const timestamp = Date.now();
+
+    console.log(timestamp + " " + post_type + " " + post_text);
+
+    if (post_type == "public") {
+        create_public_post(post_text, timestamp)
+    } else if (post_type == "private") {
+        create_private_post(post_text, timestamp)
+    }
+});
+
+function resetPostForm() {
+    $('form[name="post-form"]').find('textarea[name="post-text"]').val('');
+    $('form[name="post-form"]').find('input[name="post-type"][id="public"]').prop("checked", true);
+}
+
+function create_public_post(post_text, timestamp) {
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'get_dna_hash')({}).then(result =>
-            show_output(result, 'dna_hash'),
-        );
+        callZome('test-instance', 'hello', 'create_public_post')({
+            text: post_text,
+            timestamp: timestamp,
+        }).then(result => {
+            console.log("Public post created");
+            console_output(result);
+            resetPostForm();
+        });
+    });
+}
+
+function create_private_post(post_text, timestamp) {
+    holochain_connection.then(({callZome, close}) => {
+        callZome('test-instance', 'hello', 'create_private_post')({
+            text: post_text,
+            timestamp: timestamp,
+        }).then(result => {
+            console.log("Private post created");
+            console_output(result);
+            resetPostForm();
+        });
+    });
+}
+
+function retrieve_posts() {
+    var address = document.getElementById('address_in').value.trim();
+    holochain_connection.then(({callZome, close}) => {
+        callZome('test-instance', 'hello', 'retrieve_posts')({
+            agent_address: address,
+        }).then(result => display_posts(result));
     });
 }
 
@@ -107,6 +119,26 @@ function display_posts(result) {
     } else {
         alert(output.Err.Internal);
     }
+}
+
+async function retrieve_users() {
+    holochain_connection.then(({callZome, close}) => {
+        callZome('test-instance', 'hello', 'retrieve_users')({}).then(result => {
+            registered_users.resolve(result);
+        });
+    });
+}
+
+async function register_me(nickname) {
+    holochain_connection.then(({callZome, close}) => {
+        callZome('test-instance', 'hello', 'register_me')({
+            nickname: nickname,
+            timestamp: Date.now()
+        }).then(result => {
+            console.log("Registered!");
+            show_users.resolve(true);
+        });
+    });
 }
 
 async function display_users(result) {

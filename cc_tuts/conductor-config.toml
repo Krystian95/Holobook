@@ -10,7 +10,7 @@ test_agent = true
 
 [[dnas]]
 file = 'dist/cc_tuts.dna.json'
-hash = 'QmVCcHk6UnPV4ot3nUoXgKMyefk3fLWvJFik2PZmE9JCgT'
+hash = 'QmVUymEGTATzsiiu4mrRmvw7ib8BPJDHZJ2rX1X6jAY4y3'
 id = '__cc_tuts'
 
 [[instances]]
@@ -31,7 +31,7 @@ alias = 'test-instance'
 id = '__cc_tuts'
 
 [interfaces.driver]
-port = 50001
+port = 50000
 type = 'websocket'
 
 [[ui_bundles]]
@@ -43,7 +43,7 @@ bind_address = '127.0.0.1'
 bundle = 'cc_tuts_ui'
 dna_interface = 'cc_tuts_ui'
 id = 'cc_tuts_ui'
-port = 8889
+port = 8888
 reroute_to_root = false
 
 [logger]

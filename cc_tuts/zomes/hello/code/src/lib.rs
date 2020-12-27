@@ -5,7 +5,8 @@ use hdk_proc_macros::zome;
 
 #[derive(Serialize, Deserialize, Debug, DefaultJson, Clone)]
 pub struct Post {
-    message: String,
+    text: String,
+    post_type: String,
     timestamp: u64,
     author_id: Address,
 }
@@ -30,11 +31,6 @@ mod hello_zome {
     }
 
     #[zome_fn("hc_public")]
-    pub fn hello_holo() -> ZomeApiResult<String> {
-        Ok("Hello Holo".into())
-    }
-
-    #[zome_fn("hc_public")]
     pub fn register_me(nickname: String, timestamp: u64) -> ZomeApiResult<Address> {
         let registered_user = RegisteredUser {
             nickname,
@@ -45,49 +41,84 @@ mod hello_zome {
         let registered_user_entry = Entry::App("registered_user".into(), registered_user.into());
         let registered_user_entry_address = hdk::commit_entry(&registered_user_entry)?;
 
-        let anchor_entry = Entry::App("anchor".into(), "registered_user".into());
+        let anchor_entry = Entry::App("anchor_registered_user".into(), "registered_user".into());
         let anchor_address = hdk::commit_entry(&anchor_entry)?;
 
-        // Link the anchor to the game.
         hdk::link_entries(&anchor_address, &registered_user_entry_address, "has_registered_user", "")?;
 
         Ok(registered_user_entry_address)
     }
 
     #[zome_fn("hc_public")]
-    pub fn create_post(message: String, timestamp: u64) -> ZomeApiResult<Address> {
+    pub fn create_public_post(text: String, timestamp: u64) -> ZomeApiResult<Address> {
+        let post_type = "public".to_string();
         let post = Post {
-            message,
+            text,
+            post_type,
             timestamp,
             author_id: hdk::AGENT_ADDRESS.clone(),
         };
-        let agent_address = hdk::AGENT_ADDRESS.clone().into();
-        let entry = Entry::App("post".into(), post.into());
-        let address = hdk::commit_entry(&entry)?;
-        hdk::link_entries(&agent_address, &address, "author_post", "")?;
 
-        Ok(address)
+        let post_entry = Entry::App("public_post".into(), post.into());
+        let post_address = hdk::commit_entry(&post_entry)?;
+
+        let anchor_entry = Entry::App("anchor_public_post".into(), "public_post".into());
+        let anchor_address = hdk::commit_entry(&anchor_entry)?;
+
+        hdk::link_entries(&anchor_address, &post_address, "has_public_post", "")?;
+
+        Ok(post_address)
     }
 
     #[zome_fn("hc_public")]
-    pub fn retrieve_posts(agent_address: Address) -> ZomeApiResult<Vec<Post>> {
+    pub fn create_private_post(text: String, timestamp: u64) -> ZomeApiResult<Address> {
+        let post_type = "private".to_string();
+        let post = Post {
+            text,
+            post_type,
+            timestamp,
+            author_id: hdk::AGENT_ADDRESS.clone(),
+        };
+
+        let post_entry = Entry::App("private_post".into(), post.into());
+        let post_address = hdk::commit_entry(&post_entry)?;
+
+        let agent_address = hdk::AGENT_ADDRESS.clone().into();
+
+        hdk::link_entries(&agent_address, &post_address, "private_post", "")?;
+
+        Ok(post_address)
+    }
+
+    #[zome_fn("hc_public")]
+    pub fn retrieve_public_posts() -> ZomeApiResult<Vec<Post>> {
+        let anchor_entry = Entry::App("anchor_public_post".into(), "public_post".into());
+        let anchor_address = hdk::commit_entry(&anchor_entry)?;
+
+        hdk::utils::get_links_and_load_type(
+            &anchor_address,
+            LinkMatch::Exactly("has_public_post"),
+            LinkMatch::Any,
+        )
+    }
+
+    #[zome_fn("hc_public")]
+    pub fn retrieve_private_posts(agent_address: Address) -> ZomeApiResult<Vec<Post>> {
         hdk::utils::get_links_and_load_type(
             &agent_address,
-            LinkMatch::Exactly("author_post"),
+            LinkMatch::Exactly("private_post"),
             LinkMatch::Any,
         )
     }
 
     #[zome_fn("hc_public")]
     pub fn retrieve_users() -> ZomeApiResult<Vec<RegisteredUser>> {
-        let anchor_entry = Entry::App("anchor".into(), "registered_user".into());
+        let anchor_entry = Entry::App("anchor_registered_user".into(), "registered_user".into());
         let anchor_address = hdk::commit_entry(&anchor_entry)?;
 
         hdk::utils::get_links_and_load_type(
             &anchor_address,
-            // Match the link_type exactly has_game.
             LinkMatch::Exactly("has_registered_user"),
-            // Match any tag.
             LinkMatch::Any,
         )
     }
@@ -108,10 +139,10 @@ mod hello_zome {
     }
 
     #[entry_def]
-    fn anchor_entry_def() -> ValidatingEntryType {
+    fn anchor_registered_user_entry_def() -> ValidatingEntryType {
         entry!(
-            name: "anchor",
-            description: "Anchor to all the links",
+            name: "anchor_registered_user",
+            description: "Anchor to all Holobook registered users",
             sharing: Sharing::Public,
             validation_package: || {
                 hdk::ValidationPackageDefinition::Entry
@@ -140,10 +171,42 @@ mod hello_zome {
     }
 
     #[entry_def]
-    fn post_entry_def() -> ValidatingEntryType {
+    fn anchor_public_post_entry_def() -> ValidatingEntryType {
         entry!(
-            name: "post",
-            description: "A blog post",
+            name: "anchor_public_post",
+            description: "Anchor to all Holobook public posts",
+            sharing: Sharing::Public,
+            validation_package: || {
+                hdk::ValidationPackageDefinition::Entry
+            },
+            validation: |_validation_data: hdk::EntryValidationData<String>| {
+                Ok(())
+            },
+            // Anchor will link to all games.
+            // It is a good way for players to
+            // find which games are available.
+            links: [
+            to!(
+                // Link to the game entry
+                "public_post",
+                // This link is a has_game link
+                link_type: "has_public_post",
+               validation_package: || {
+                   hdk::ValidationPackageDefinition::Entry
+               },
+               validation: |_validation_data: hdk::LinkValidationData| {
+                   Ok(())
+               }
+            )
+            ]
+        )
+    }
+
+    #[entry_def]
+    fn public_post_entry_def() -> ValidatingEntryType {
+        entry!(
+            name: "public_post",
+            description: "A Holobook public post",
             sharing: Sharing::Public,
             validation_package: || {
                 hdk::ValidationPackageDefinition::Entry
@@ -152,7 +215,7 @@ mod hello_zome {
                 match validation_data {
                     hdk::EntryValidationData::Create{ entry, .. } => {
                         const MAX_LENGTH: usize = 140;
-                        if entry.message.len() <= MAX_LENGTH {
+                        if entry.text.len() <= MAX_LENGTH {
                            Ok(())
                         } else {
                            Err("Post too long".into())
@@ -164,7 +227,44 @@ mod hello_zome {
             links: [
                 from!(
                    "%agent_id",
-                   link_type: "author_post",
+                   link_type: "public_post",
+                   validation_package: || {
+                       hdk::ValidationPackageDefinition::Entry
+                   },
+                   validation: |_validation_data: hdk::LinkValidationData| {
+                       Ok(())
+                   }
+                )
+            ]
+        )
+    }
+
+    #[entry_def]
+    fn private_post_entry_def() -> ValidatingEntryType {
+        entry!(
+            name: "private_post",
+            description: "A Holobook private post",
+            sharing: Sharing::Private,
+            validation_package: || {
+                hdk::ValidationPackageDefinition::Entry
+            },
+            validation: | validation_data: hdk::EntryValidationData<Post>| {
+                match validation_data {
+                    hdk::EntryValidationData::Create{ entry, .. } => {
+                        const MAX_LENGTH: usize = 140;
+                        if entry.text.len() <= MAX_LENGTH {
+                           Ok(())
+                        } else {
+                           Err("Post too long".into())
+                        }
+                    },
+                    _ => Ok(()),
+                }
+            },
+            links: [
+                from!(
+                   "%agent_id",
+                   link_type: "private_post",
                    validation_package: || {
                        hdk::ValidationPackageDefinition::Entry
                    },
@@ -180,7 +280,7 @@ mod hello_zome {
     fn registered_user_entry_def() -> ValidatingEntryType {
         entry!(
             name: "registered_user",
-            description: "A user registered to Facebook",
+            description: "A Holobook user registered",
             sharing: Sharing::Public,
             validation_package: || {
                 hdk::ValidationPackageDefinition::Entry
