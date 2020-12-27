@@ -1,4 +1,8 @@
 var holochain_connection = holochainclient.connect();
+var agent_nickname = $.Deferred();
+var registered_users = $.Deferred();
+var user_is_registered = $.Deferred();
+var show_users = $.Deferred();
 
 // Render functions
 function show_output(result, id) {
@@ -32,25 +36,6 @@ function create_post() {
     });
 }
 
-function register_me() {
-    holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'get_agent')({}).then(result => {
-                var json = JSON.parse(result);
-                var json_inner = JSON.parse(json.Ok);
-                var nickname = json_inner.nick;
-
-                const timestamp = Date.now();
-                holochain_connection.then(({callZome, close}) => {
-                    callZome('test-instance', 'hello', 'register_me')({
-                        nickname: nickname,
-                        timestamp: timestamp
-                    }).then(result => show_output(result, 'address_output'));
-                });
-            }
-        );
-    });
-}
-
 function retrieve_posts() {
     var address = document.getElementById('address_in').value.trim();
     holochain_connection.then(({callZome, close}) => {
@@ -60,9 +45,23 @@ function retrieve_posts() {
     });
 }
 
-function retrieve_users() {
+async function register_me(nickname) {
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'retrieve_users')({}).then(result => display_users(result));
+        callZome('test-instance', 'hello', 'register_me')({
+            nickname: nickname,
+            timestamp: Date.now()
+        }).then(result => {
+            console.log("Registered!");
+            show_users.resolve(true);
+        });
+    });
+}
+
+async function retrieve_users() {
+    holochain_connection.then(({callZome, close}) => {
+        callZome('test-instance', 'hello', 'retrieve_users')({}).then(result => {
+            registered_users.resolve(result);
+        });
     });
 }
 
@@ -74,12 +73,12 @@ function get_agent_id() {
     });
 }
 
-function get_agent() {
+async function get_agent_nickname() {
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'get_agent')({}).then(result => {
+        callZome('test-instance', 'hello', 'get_agent_nickname')({}).then(result => {
                 var json = JSON.parse(result);
                 var json_inner = JSON.parse(json.Ok);
-                console.log(json_inner.nick);
+                agent_nickname.resolve(json_inner.nick);
             }
         );
     });
@@ -110,15 +109,15 @@ function display_posts(result) {
     }
 }
 
-function display_users(result) {
+async function display_users(result) {
     var list = document.getElementById('users_output');
     list.innerHTML = "";
     var output = JSON.parse(result);
-    console.log(output);
     if (output.Ok) {
+        console.log("Displaying users...");
         var users = output.Ok.sort((a, b) => a.timestamp - b.timestamp);
         for (user of users) {
-            console.log(user.nickname + ": " + user.user_address);
+            /*console.log(user.nickname + ": " + user.user_address);*/
             var node = document.createElement("li");
             var div = document.createElement('div');
             div.innerHTML = '<a href="#!" data-user_address="' + user.user_address + '">' + user.nickname + '</a>'
@@ -129,3 +128,53 @@ function display_users(result) {
         alert(output.Err.Internal);
     }
 }
+
+async function set_agent_is_registered(agent_nickname, registered_users) {
+    $.each(registered_users, function (index, registered_user) {
+        if (registered_user.nickname == agent_nickname) {
+            user_is_registered.resolve(true);
+        }
+    });
+
+    user_is_registered.resolve(false);
+}
+
+$(document).ready(function () {
+    get_agent_nickname();
+    $.when(agent_nickname).done(function (result_agent_nickname) {
+        retrieve_users();
+        $.when(registered_users).done(function (result_registered_users) {
+            var result = JSON.parse(result_registered_users);
+            if (result.Ok) {
+                var registered_users_result = result.Ok;
+                set_agent_is_registered(result_agent_nickname, registered_users_result);
+                $.when(user_is_registered).done(function (result_user_is_registered) {
+                    if (!result_user_is_registered) {
+                        console.log(result_agent_nickname + " is not registered. Registering now...");
+                        register_me(result_agent_nickname);
+                    } else {
+                        console.log(result_agent_nickname + " is already registered.");
+                        show_users.resolve(true);
+                    }
+
+                    $.when(show_users).done(function () {
+                        /*console.log("Resolved 'show_users'");*/
+                        registered_users = $.Deferred();
+                        retrieve_users();
+                        $.when(registered_users).done(function (result_registered_users) {
+                            /*console.log("Resolved 'registered_users'");*/
+                            var result = JSON.parse(result_registered_users);
+                            if (result.Ok) {
+                                display_users(result_registered_users);
+                            } else {
+                                alert(output.Err.Internal);
+                            }
+                        });
+                    });
+                });
+            } else {
+                alert(output.Err.Internal);
+            }
+        });
+    });
+});

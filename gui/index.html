@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css"/>
 </head>
 
-<body onload="get_agent_id(); get_dna_hash(); register_me()">
+<body onload="get_agent_id(); get_dna_hash();">
 
 <button onclick="hello()" type="button">Say Hello</button>
 <div>Response: <span id="output"></span></div>
@@ -26,9 +26,7 @@
 
 <ul id="posts_output"></ul>
 
-<h3>Users</h3>
-<!--<button onclick="register_me()" type="button">Register me</button>-->
-<button onclick="retrieve_users()" type="button">Show Users</button>
+<h3>Utenti registrati</h3>
 
 <ul id="users_output"></ul>
 
@@ -38,6 +36,7 @@
 <h3>DNA hash:</h3>
 <div id="dna_hash"></div>
 
+<script type="text/javascript" src="lib/jquery-3.5.1.min.js"></script>
 <script type="text/javascript" src="hc-web-client-0.5.3/hc-web-client-0.5.3.browser.min.js"></script>
 
 <script type="text/javascript" src="hello.js"></script>

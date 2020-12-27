@@ -45,9 +45,9 @@ mod hello_zome {
         let registered_user_entry = Entry::App("registered_user".into(), registered_user.into());
         let registered_user_entry_address = hdk::commit_entry(&registered_user_entry)?;
 
-        // Create the anchor entry and commit it to the chain.
         let anchor_entry = Entry::App("anchor".into(), "registered_user".into());
         let anchor_address = hdk::commit_entry(&anchor_entry)?;
+
         // Link the anchor to the game.
         hdk::link_entries(&anchor_address, &registered_user_entry_address, "has_registered_user", "")?;
 
@@ -82,9 +82,7 @@ mod hello_zome {
     pub fn retrieve_users() -> ZomeApiResult<Vec<RegisteredUser>> {
         let anchor_entry = Entry::App("anchor".into(), "registered_user".into());
         let anchor_address = hdk::commit_entry(&anchor_entry)?;
-        // Now search for all links from the anchors address
-        // that are called `has_game`.
-        // This call also loads the `Entry` into the `Game` type.
+
         hdk::utils::get_links_and_load_type(
             &anchor_address,
             // Match the link_type exactly has_game.
@@ -105,7 +103,7 @@ mod hello_zome {
     }
 
     #[zome_fn("hc_public")]
-    pub fn get_agent() -> ZomeApiResult<String> {
+    pub fn get_agent_nickname() -> ZomeApiResult<String> {
         Ok(hdk::AGENT_ID_STR.to_string().clone())
     }
 
