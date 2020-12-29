@@ -58,7 +58,7 @@ mod hello_zome {
             post_type,
             timestamp,
             author_address: hdk::AGENT_ADDRESS.clone(),
-            author_nickname
+            author_nickname,
         };
 
         let post_entry = Entry::App("public_post".into(), post.into());
@@ -67,7 +67,10 @@ mod hello_zome {
         let anchor_entry = Entry::App("anchor_public_post".into(), "public_post".into());
         let anchor_address = hdk::commit_entry(&anchor_entry)?;
 
-        hdk::link_entries(&anchor_address, &post_address, "has_public_post", "")?;
+        let agent_address = hdk::AGENT_ADDRESS.clone().into();
+
+        hdk::link_entries(&anchor_address, &post_address, "anchor_has_public_post", "")?;
+        hdk::link_entries(&agent_address, &post_address, "user_has_public_post", "")?;
 
         Ok(post_address)
     }
@@ -80,7 +83,7 @@ mod hello_zome {
             post_type,
             timestamp,
             author_address: hdk::AGENT_ADDRESS.clone(),
-            author_nickname
+            author_nickname,
         };
 
         let post_entry = Entry::App("private_post".into(), post.into());
@@ -94,13 +97,22 @@ mod hello_zome {
     }
 
     #[zome_fn("hc_public")]
-    pub fn retrieve_public_posts() -> ZomeApiResult<Vec<Post>> {
+    pub fn retrieve_all_public_posts() -> ZomeApiResult<Vec<Post>> {
         let anchor_entry = Entry::App("anchor_public_post".into(), "public_post".into());
         let anchor_address = hdk::commit_entry(&anchor_entry)?;
 
         hdk::utils::get_links_and_load_type(
             &anchor_address,
-            LinkMatch::Exactly("has_public_post"),
+            LinkMatch::Exactly("anchor_has_public_post"),
+            LinkMatch::Any,
+        )
+    }
+
+    #[zome_fn("hc_public")]
+    pub fn retrieve_user_public_posts(user_address: Address) -> ZomeApiResult<Vec<Post>> {
+        hdk::utils::get_links_and_load_type(
+            &user_address,
+            LinkMatch::Exactly("user_has_public_post"),
             LinkMatch::Any,
         )
     }
@@ -153,22 +165,17 @@ mod hello_zome {
             validation: |_validation_data: hdk::EntryValidationData<String>| {
                 Ok(())
             },
-            // Anchor will link to all games.
-            // It is a good way for players to
-            // find which games are available.
             links: [
-            to!(
-                // Link to the game entry
-                "registered_user",
-                // This link is a has_game link
-                link_type: "has_registered_user",
-               validation_package: || {
-                   hdk::ValidationPackageDefinition::Entry
-               },
-               validation: |_validation_data: hdk::LinkValidationData| {
-                   Ok(())
-               }
-            )
+                to!(
+                    "registered_user",
+                    link_type: "has_registered_user",
+                    validation_package: || {
+                        hdk::ValidationPackageDefinition::Entry
+                    },
+                    validation: |_validation_data: hdk::LinkValidationData| {
+                        Ok(())
+                    }
+                )
             ]
         )
     }
@@ -185,22 +192,17 @@ mod hello_zome {
             validation: |_validation_data: hdk::EntryValidationData<String>| {
                 Ok(())
             },
-            // Anchor will link to all games.
-            // It is a good way for players to
-            // find which games are available.
             links: [
-            to!(
-                // Link to the game entry
-                "public_post",
-                // This link is a has_game link
-                link_type: "has_public_post",
-               validation_package: || {
-                   hdk::ValidationPackageDefinition::Entry
-               },
-               validation: |_validation_data: hdk::LinkValidationData| {
-                   Ok(())
-               }
-            )
+                to!(
+                   "public_post",
+                   link_type: "anchor_has_public_post",
+                   validation_package: || {
+                       hdk::ValidationPackageDefinition::Entry
+                   },
+                   validation: |_validation_data: hdk::LinkValidationData| {
+                       Ok(())
+                   }
+                )
             ]
         )
     }
@@ -229,8 +231,18 @@ mod hello_zome {
             },
             links: [
                 from!(
+                   "anchor_public_post",
+                   link_type: "anchor_has_public_post",
+                   validation_package: || {
+                       hdk::ValidationPackageDefinition::Entry
+                   },
+                   validation: |_validation_data: hdk::LinkValidationData| {
+                       Ok(())
+                   }
+                ),
+                from!(
                    "%agent_id",
-                   link_type: "public_post",
+                   link_type: "user_has_public_post",
                    validation_package: || {
                        hdk::ValidationPackageDefinition::Entry
                    },
@@ -303,7 +315,7 @@ mod hello_zome {
             },
             links: [
                 from!(
-                   "%agent_id",
+                   "anchor_registered_user",
                    link_type: "registered_user",
                    validation_package: || {
                        hdk::ValidationPackageDefinition::Entry

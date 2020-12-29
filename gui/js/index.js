@@ -18,21 +18,6 @@ function console_output(result) {
     }
 }
 
-function convert_timestamp(timestamp) {
-    var options = {
-        'weekday': 'long',
-        'day': '2-digit',
-        'month': 'long',
-        'year': 'numeric',
-        'hour12': false,
-        'hourCycle': 'h24',
-        'hour': '2-digit',
-        'minute': '2-digit',
-        'second': '2-digit'
-    };
-    return new Date(timestamp).toLocaleString('it-IT', options);
-}
-
 // Zome calls
 
 function get_agent_id() {
@@ -60,7 +45,7 @@ async function get_agent_nickname() {
         callZome('test-instance', 'hello', 'get_agent_nickname')({}).then(result => {
                 var json = JSON.parse(result);
                 var json_inner = JSON.parse(json.Ok);
-            agent_nickname_callback.resolve(json_inner.nick);
+                agent_nickname_callback.resolve(json_inner.nick);
             }
         );
     });
@@ -98,7 +83,7 @@ function create_public_post(post_text, timestamp, author_nickname) {
             console_output(result);
             resetPostForm();
             setTimeout(() => {
-                retrieve_public_posts();
+                retrieve_all_public_posts();
             }, 3000);
         });
     });
@@ -118,10 +103,10 @@ function create_private_post(post_text, timestamp, author_nickname) {
     });
 }
 
-function retrieve_public_posts() {
+function retrieve_all_public_posts() {
     console.log("Retriving public post");
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'retrieve_public_posts')({}).then(result => display_posts(result));
+        callZome('test-instance', 'hello', 'retrieve_all_public_posts')({}).then(result => display_posts(result));
     });
 }
 
@@ -132,8 +117,9 @@ function display_posts(result) {
     if (output.Ok) {
         const posts = output.Ok.sort((a, b) => b.timestamp - a.timestamp);
         let post;
+        let utils = new Utils();
         for (post of posts) {
-            var post_element = '<div>' + post.text + ' (' + convert_timestamp(post.timestamp) + ') - ' + post.author_nickname + '</div>';
+            var post_element = '<div>' + post.text + ' (' + utils.convert_timestamp_to_datetime(post.timestamp) + ') - ' + post.author_nickname + '</div>';
             $('#public_posts').append(post_element);
         }
     } else {
@@ -169,7 +155,7 @@ async function display_users(result) {
         var users = output.Ok.sort((a, b) => b.timestamp - a.timestamp);
         for (user of users) {
             /*console.log(user.nickname + ": " + user.user_address);*/
-            var user_element = '<div><a href="#!" data-user_address="' + user.user_address + '">' + user.nickname + '</a></div>';
+            var user_element = '<div><a href="../user-profile.html?user_address=' + user.user_address + '">' + user.nickname + '</a></div>';
             $('#users_list').append(user_element);
         }
     } else {
@@ -189,11 +175,12 @@ async function set_agent_is_registered(agent_nickname, registered_users) {
 
 $(document).ready(function () {
 
-    retrieve_public_posts();
+    retrieve_all_public_posts();
 
     get_agent_nickname();
     $.when(agent_nickname_callback).done(function (result_agent_nickname) {
         angent_nickname = result_agent_nickname;
+        $('#agent_nickname').text(angent_nickname);
         retrieve_users();
         $.when(registered_users).done(function (result_registered_users) {
             var result = JSON.parse(result_registered_users);

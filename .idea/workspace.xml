@@ -2,10 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0c2adec3-e32e-4641-b0cb-141f39e1c8cc" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/gui/js/Utils.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/js/user-profile.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/user-profile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cc_tuts/bundle.toml" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/bundle.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cc_tuts/conductor-config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/conductor-config.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cc_tuts/zomes/hello/code/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/zomes/hello/code/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/hello.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/hello.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/hello.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/gui/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -15,6 +19,14 @@
   </component>
   <component name="ComposerSettings">
     <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -32,10 +44,11 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/gui/js" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -47,6 +60,14 @@
     <property name="org.rust.hideToolchainNotifications" value="true" />
     <property name="settings.editor.selected.configurable" value="language.rust" />
     <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/gui/js" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/gui/js" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -62,7 +83,10 @@
       <workItem from="1608662755265" duration="2300000" />
       <workItem from="1608746113232" duration="2667000" />
       <workItem from="1609003848904" duration="6306000" />
-      <workItem from="1609083986148" duration="11970000" />
+      <workItem from="1609083986148" duration="12386000" />
+      <workItem from="1609178080985" duration="6459000" />
+      <workItem from="1609252899815" duration="360000" />
+      <workItem from="1609263684315" duration="342000" />
     </task>
     <servers />
   </component>
