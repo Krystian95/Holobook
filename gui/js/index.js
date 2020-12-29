@@ -106,25 +106,11 @@ function create_private_post(post_text, timestamp, author_nickname) {
 function retrieve_all_public_posts() {
     console.log("Retriving public post");
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'retrieve_all_public_posts')({}).then(result => display_posts(result));
+        callZome('test-instance', 'hello', 'retrieve_all_public_posts')({}).then(result => {
+            let utils = new Utils();
+            utils.display_post(result);
+        });
     });
-}
-
-function display_posts(result) {
-    console.log("Displaying posts...");
-    $('#public_posts').empty();
-    const output = JSON.parse(result);
-    if (output.Ok) {
-        const posts = output.Ok.sort((a, b) => b.timestamp - a.timestamp);
-        let post;
-        let utils = new Utils();
-        for (post of posts) {
-            var post_element = '<div>' + post.text + ' (' + utils.convert_timestamp_to_datetime(post.timestamp) + ') - ' + post.author_nickname + '</div>';
-            $('#public_posts').append(post_element);
-        }
-    } else {
-        alert(output.Err.Internal);
-    }
 }
 
 async function retrieve_users() {
@@ -155,7 +141,7 @@ async function display_users(result) {
         var users = output.Ok.sort((a, b) => b.timestamp - a.timestamp);
         for (user of users) {
             /*console.log(user.nickname + ": " + user.user_address);*/
-            var user_element = '<div><a href="../user-profile.html?user_address=' + user.user_address + '">' + user.nickname + '</a></div>';
+            var user_element = '<div><a href="../user-profile.html?user_address=' + user.user_address + '&user_nickname=' + user.nickname + '">' + user.nickname + '</a></div>';
             $('#users_list').append(user_element);
         }
     } else {

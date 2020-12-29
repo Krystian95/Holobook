@@ -4,7 +4,7 @@ bridges = []
 [[instances]]
 name = "cc_tuts"
 id = "__cc_tuts"
-dna_hash = "QmfWDmmHdLhQxXneMHDiwZP2KMLCv3RayzgqVJwRSqaV9r"
+dna_hash = "QmTmHAFdGXZMECGnBiX9utTTuJdbcZq73oB5hZFo9wStCh"
 uri = "file:dist/cc_tuts.dna.json"
 
 [[UIs]]

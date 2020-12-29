@@ -91,7 +91,7 @@ mod hello_zome {
 
         let agent_address = hdk::AGENT_ADDRESS.clone().into();
 
-        hdk::link_entries(&agent_address, &post_address, "private_post", "")?;
+        hdk::link_entries(&agent_address, &post_address, "user_has_private_post", "")?;
 
         Ok(post_address)
     }
@@ -118,10 +118,10 @@ mod hello_zome {
     }
 
     #[zome_fn("hc_public")]
-    pub fn retrieve_private_posts(agent_address: Address) -> ZomeApiResult<Vec<Post>> {
+    pub fn retrieve_user_private_posts(user_address: Address) -> ZomeApiResult<Vec<Post>> {
         hdk::utils::get_links_and_load_type(
-            &agent_address,
-            LinkMatch::Exactly("private_post"),
+            &user_address,
+            LinkMatch::Exactly("user_has_private_post"),
             LinkMatch::Any,
         )
     }
@@ -279,7 +279,7 @@ mod hello_zome {
             links: [
                 from!(
                    "%agent_id",
-                   link_type: "private_post",
+                   link_type: "user_has_private_post",
                    validation_package: || {
                        hdk::ValidationPackageDefinition::Entry
                    },

@@ -2,15 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0c2adec3-e32e-4641-b0cb-141f39e1c8cc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/gui/js/Utils.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/js/user-profile.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/user-profile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cc_tuts/bundle.toml" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/bundle.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cc_tuts/conductor-config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/conductor-config.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cc_tuts/zomes/hello/code/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/cc_tuts/zomes/hello/code/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/hello.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/gui/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/js/Utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/Utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/js/user-profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/user-profile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/user-profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/gui/user-profile.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +86,7 @@
       <workItem from="1609083986148" duration="12386000" />
       <workItem from="1609178080985" duration="6459000" />
       <workItem from="1609252899815" duration="360000" />
-      <workItem from="1609263684315" duration="342000" />
+      <workItem from="1609263684315" duration="3010000" />
     </task>
     <servers />
   </component>
