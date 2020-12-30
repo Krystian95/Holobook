@@ -2476,8 +2476,8 @@ consistent!(bobbin_cli_4, r"Open On-Chip Debugger (.*)");
 // bobbin-cli-0.8.3: r"arm-none-eabi-gcc \(GNU Tools for ARM Embedded Processors[^\)]*\) (.*)"
 consistent!(bobbin_cli_5, r"arm-none-eabi-gcc \(GNU Tools for ARM Embedded Processors[^\)]*\) (.*)");
 
-// bobbin-cli-0.8.3: r"(?m).*\nBasic Open Source SAM-BA Application \(BOSSA\) Version (.*)\n"
-consistent!(bobbin_cli_6, r"(?m).*\nBasic Open Source SAM-BA Application \(BOSSA\) Version (.*)\n");
+// bobbin-cli-0.8.3: r"(?m).*\nBasic Open Source SAM-BA Holobook \(BOSSA\) Version (.*)\n"
+consistent!(bobbin_cli_6, r"(?m).*\nBasic Open Source SAM-BA Holobook \(BOSSA\) Version (.*)\n");
 
 // bobbin-cli-0.8.3: r"(?m)SEGGER J-Link Commander (.*)\n"
 consistent!(bobbin_cli_7, r"(?m)SEGGER J-Link Commander (.*)\n");

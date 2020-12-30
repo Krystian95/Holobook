@@ -25,7 +25,7 @@ Utils.prototype.get_post_element_template = function (text, timestamp, author_ni
     return '<div>' + text + ' (' + this.convert_timestamp_to_datetime(timestamp) + ') - ' + author_nickname + ' [' + type + ']</div>';
 }
 
-Utils.prototype.display_post = function(result) {
+Utils.prototype.display_post = function (result) {
     console.log("Displaying posts...");
     $('#posts').empty();
     const output = JSON.parse(result);
@@ -38,5 +38,14 @@ Utils.prototype.display_post = function(result) {
         }
     } else {
         alert(output.Err.Internal);
+    }
+}
+
+Utils.prototype.console_output = function (result) {
+    var output = JSON.parse(result);
+    if (output.Ok) {
+        console.log(output.Ok);
+    } else {
+        console.log(output.Err.Internal);
     }
 }

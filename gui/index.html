@@ -3,8 +3,9 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Hello GUI</title>
+    <title>Holobook</title>
     <meta name="description" content="GUI for a Holochain app"/>
+    <!--<link rel="stylesheet" href="./bootstrap-5.0.0-beta1-dist/css/bootstrap.min.css"/>-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css"/>
 </head>
 
@@ -38,17 +39,19 @@
 
 <div>
     <h3>Agent:</h3>
-    <span id="agent_nickname"></span> <span id="agent_id"></span>
+    <span class="user_nickname"></span> (<span class="user_address"></span>)
 </div>
 
 <div>
     <h3>DNA hash:</h3>
-    <div id="dna_hash"></div>
+    <div class="dna_address"></div>
 </div>
 
+<!--<script type="text/javascript" src="./bootstrap-5.0.0-beta1-dist/js/bootstrap.min.js"></script>-->
 <script type="text/javascript" src="lib/jquery-3.5.1.min.js"></script>
 <script type="text/javascript" src="hc-web-client-0.5.3/hc-web-client-0.5.3.browser.min.js"></script>
 <script type="text/javascript" src="js/Utils.js"></script>
+<script type="text/javascript" src="js/Holobook.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
 
 </body>

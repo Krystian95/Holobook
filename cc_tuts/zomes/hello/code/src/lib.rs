@@ -19,6 +19,13 @@ pub struct RegisteredUser {
     timestamp: u64,
 }
 
+#[derive(Serialize, Deserialize, Debug, DefaultJson, Clone)]
+pub struct UserData {
+    nome: String,
+    cognome: String,
+    biografia: String
+}
+
 #[zome]
 mod hello_zome {
     #[init]
@@ -39,15 +46,15 @@ mod hello_zome {
             timestamp,
         };
 
-        let registered_user_entry = Entry::App("registered_user".into(), registered_user.into());
-        let registered_user_entry_address = hdk::commit_entry(&registered_user_entry)?;
+        let entry = Entry::App("registered_user".into(), registered_user.into());
+        let entry_address = hdk::commit_entry(&entry)?;
 
         let anchor_entry = Entry::App("anchor_registered_user".into(), "registered_user".into());
         let anchor_address = hdk::commit_entry(&anchor_entry)?;
 
-        hdk::link_entries(&anchor_address, &registered_user_entry_address, "has_registered_user", "")?;
+        hdk::link_entries(&anchor_address, &entry_address, "has_registered_user", "")?;
 
-        Ok(registered_user_entry_address)
+        Ok(entry_address)
     }
 
     #[zome_fn("hc_public")]
@@ -61,18 +68,18 @@ mod hello_zome {
             author_nickname,
         };
 
-        let post_entry = Entry::App("public_post".into(), post.into());
-        let post_address = hdk::commit_entry(&post_entry)?;
+        let entry = Entry::App("public_post".into(), post.into());
+        let entry_address = hdk::commit_entry(&entry)?;
 
         let anchor_entry = Entry::App("anchor_public_post".into(), "public_post".into());
         let anchor_address = hdk::commit_entry(&anchor_entry)?;
 
         let agent_address = hdk::AGENT_ADDRESS.clone().into();
 
-        hdk::link_entries(&anchor_address, &post_address, "anchor_has_public_post", "")?;
-        hdk::link_entries(&agent_address, &post_address, "user_has_public_post", "")?;
+        hdk::link_entries(&anchor_address, &entry_address, "anchor_has_public_post", "")?;
+        hdk::link_entries(&agent_address, &entry_address, "user_has_public_post", "")?;
 
-        Ok(post_address)
+        Ok(entry_address)
     }
 
     #[zome_fn("hc_public")]
@@ -86,14 +93,32 @@ mod hello_zome {
             author_nickname,
         };
 
-        let post_entry = Entry::App("private_post".into(), post.into());
-        let post_address = hdk::commit_entry(&post_entry)?;
+        let entry = Entry::App("private_post".into(), post.into());
+        let entry_address = hdk::commit_entry(&entry)?;
 
         let agent_address = hdk::AGENT_ADDRESS.clone().into();
 
-        hdk::link_entries(&agent_address, &post_address, "user_has_private_post", "")?;
+        hdk::link_entries(&agent_address, &entry_address, "user_has_private_post", "")?;
 
-        Ok(post_address)
+        Ok(entry_address)
+    }
+
+    #[zome_fn("hc_public")]
+    pub fn create_user_data(nome: String, cognome: String, biografia: String) -> ZomeApiResult<Address> {
+        let user_data = UserData {
+            nome,
+            cognome,
+            biografia
+        };
+
+        let entry = Entry::App("user_data".into(), user_data.into());
+        let address = hdk::commit_entry(&entry)?;
+
+        let agent_address = hdk::AGENT_ADDRESS.clone().into();
+
+        hdk::link_entries(&agent_address, &address, "user_has_user_data", "")?;
+
+        Ok(address)
     }
 
     #[zome_fn("hc_public")]
@@ -122,6 +147,15 @@ mod hello_zome {
         hdk::utils::get_links_and_load_type(
             &user_address,
             LinkMatch::Exactly("user_has_private_post"),
+            LinkMatch::Any,
+        )
+    }
+
+    #[zome_fn("hc_public")]
+    pub fn retrieve_user_data(user_address: Address) -> ZomeApiResult<Vec<Post>> {
+        hdk::utils::get_links_and_load_type(
+            &user_address,
+            LinkMatch::Exactly("user_has_user_data"),
             LinkMatch::Any,
         )
     }
@@ -280,6 +314,43 @@ mod hello_zome {
                 from!(
                    "%agent_id",
                    link_type: "user_has_private_post",
+                   validation_package: || {
+                       hdk::ValidationPackageDefinition::Entry
+                   },
+                   validation: |_validation_data: hdk::LinkValidationData| {
+                       Ok(())
+                   }
+                )
+            ]
+        )
+    }
+
+    #[entry_def]
+    fn user_data_entry_def() -> ValidatingEntryType {
+        entry!(
+            name: "user_data",
+            description: "User's public information",
+            sharing: Sharing::Public,
+            validation_package: || {
+                hdk::ValidationPackageDefinition::Entry
+            },
+            validation: | validation_data: hdk::EntryValidationData<UserData>| {
+                match validation_data {
+                    hdk::EntryValidationData::Create{ entry, .. } => {
+                        const MAX_LENGTH: usize = 140;
+                        if entry.biografia.len() <= MAX_LENGTH {
+                           Ok(())
+                        } else {
+                           Err("Biografia too long".into())
+                        }
+                    },
+                    _ => Ok(()),
+                }
+            },
+            links: [
+                from!(
+                   "%agent_id",
+                   link_type: "user_has_user_data",
                    validation_package: || {
                        hdk::ValidationPackageDefinition::Entry
                    },

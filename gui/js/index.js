@@ -4,39 +4,28 @@ const agent_nickname_callback = $.Deferred();
 let registered_users = $.Deferred();
 const user_is_registered = $.Deferred();
 const show_users = $.Deferred();
+const user_address_retrieved = $.Deferred();
+const dna_address_retrieved = $.Deferred();
 
-let angent_nickname;
-
-// Console function
-
-function console_output(result) {
-    var output = JSON.parse(result);
-    if (output.Ok) {
-        console.log(output.Ok);
-    } else {
-        console.log(output.Err.Internal);
-    }
-}
+let user_nickname;
 
 // Zome calls
 
 function get_agent_id() {
-    holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'get_agent_id')({}).then(result => {
-                var output = JSON.parse(result);
-                $('#agent_id').text(output.Ok);
-            }
-        );
+    const holobook = new Holobook();
+    holobook.get_agent_address(holochain_connection, user_address_retrieved);
+    $.when(user_address_retrieved).done(function (agent_id) {
+        console.log("agent_id = " + agent_id);
+        $('.user_address').text(agent_id);
     });
 }
 
 function get_dna_hash() {
-    holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'get_dna_hash')({}).then(result => {
-                var output = JSON.parse(result);
-                $('#dna_hash').text(output.Ok);
-            }
-        );
+    const holobook = new Holobook();
+    holobook.get_dna_hash(holochain_connection, dna_address_retrieved);
+    $.when(dna_address_retrieved).done(function (dna_address) {
+        console.log("dna_address = " + dna_address);
+        $('.dna_address').text(dna_address);
     });
 }
 
@@ -58,12 +47,12 @@ $('form[name="post-form"]').submit(function (e) {
     const post_type = $(this).find('input[name="post-type"]:checked').val();
     const timestamp = Date.now();
 
-    console.log(timestamp + " " + post_type + " " + post_text + " " + angent_nickname);
+    console.log(timestamp + " " + post_type + " " + post_text + " " + user_nickname);
 
     if (post_type == "public") {
-        create_public_post(post_text, timestamp, angent_nickname);
+        create_public_post(post_text, timestamp, user_nickname);
     } else if (post_type == "private") {
-        create_private_post(post_text, timestamp, angent_nickname);
+        create_private_post(post_text, timestamp, user_nickname);
     }
 });
 
@@ -80,7 +69,8 @@ function create_public_post(post_text, timestamp, author_nickname) {
             author_nickname: author_nickname
         }).then(result => {
             console.log("Public post created");
-            console_output(result);
+            const utils = new Utils();
+            utils.console_output(result);
             resetPostForm();
             setTimeout(() => {
                 retrieve_all_public_posts();
@@ -97,7 +87,8 @@ function create_private_post(post_text, timestamp, author_nickname) {
             author_nickname: author_nickname
         }).then(result => {
             console.log("Private post created");
-            console_output(result);
+            const utils = new Utils();
+            utils.console_output(result);
             resetPostForm();
         });
     });
@@ -160,13 +151,12 @@ async function set_agent_is_registered(agent_nickname, registered_users) {
 }
 
 $(document).ready(function () {
-
     retrieve_all_public_posts();
 
     get_agent_nickname();
     $.when(agent_nickname_callback).done(function (result_agent_nickname) {
-        angent_nickname = result_agent_nickname;
-        $('#agent_nickname').text(angent_nickname);
+        user_nickname = result_agent_nickname;
+        $('.user_nickname').text(user_nickname);
         retrieve_users();
         $.when(registered_users).done(function (result_registered_users) {
             var result = JSON.parse(result_registered_users);

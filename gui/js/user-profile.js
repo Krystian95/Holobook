@@ -2,6 +2,10 @@ const holochain_connection = holochainclient.connect();
 
 const public_posts_retrieved = $.Deferred();
 const private_posts_retrieved = $.Deferred();
+const address_logged_user_retrieved = $.Deferred();
+let user_data_retrieved = $.Deferred();
+
+var user_address;
 
 function retrieve_user_public_posts(user_address) {
     console.log("Retriving user public post");
@@ -21,16 +25,92 @@ function retrieve_user_private_posts(user_address) {
     });
 }
 
+$('form[name="user-data-form"]').submit(function (e) {
+    e.preventDefault();
+
+    const nome = $(this).find('input[name="nome"]').val();
+    const cognome = $(this).find('input[name="cognome"]').val();
+    const biografia = $(this).find('textarea[name="biografia"]').val();
+
+    console.log(nome + " " + cognome + " " + biografia);
+
+    create_user_data(nome, cognome, biografia)
+});
+
+function retrieve_user_data(user_address) {
+    console.log("Retriving user data");
+    holochain_connection.then(({callZome, close}) => {
+        callZome('test-instance', 'hello', 'retrieve_user_data')({
+            user_address: user_address
+        }).then(result => user_data_retrieved.resolve(result));
+    });
+}
+
+function create_user_data(nome, cognome, biografia) {
+    console.log("Creating user data");
+    holochain_connection.then(({callZome, close}) => {
+        callZome('test-instance', 'hello', 'create_user_data')({
+            nome: nome,
+            cognome: cognome,
+            biografia: biografia
+        }).then(result => {
+            const utils = new Utils();
+            utils.console_output(result);
+            user_data_retrieved = $.Deferred();
+            retrieve_user_data(user_address);
+        });
+    });
+}
+
+function display_user_data(result) {
+    $('#user_data').empty();
+    $('#user_data_input').hide();
+    $('#no_user_data').hide();
+    var output = JSON.parse(result);
+    if (output.Ok) {
+        var user_data = output.Ok;
+        console.log(user_data);
+        console.log("Displaying user data...");
+        $('#user_data .nome').text();
+    } else {
+        alert(output.Err.Internal);
+    }
+}
+
+function resetPostForm() {
+    $('form[name="post-form"]').find('textarea[name="post-text"]').val('');
+    $('form[name="post-form"]').find('input[name="post-type"][id="public"]').prop("checked", true);
+}
+
 $(document).ready(function () {
     const utils = new Utils();
+    const holobook = new Holobook();
+
     const user_nickname = utils.retrieve_param_from_url("user_nickname", window.location.href);
-    const user_address = utils.retrieve_param_from_url("user_address", window.location.href);
+    user_address = utils.retrieve_param_from_url("user_address", window.location.href);
     console.log(user_nickname + ": " + user_address);
 
-    $('#user_nickname').text(user_nickname);
+    $('.user_nickname').text(user_nickname);
+
+    holobook.get_agent_address(holochain_connection, address_logged_user_retrieved);
+    $.when(address_logged_user_retrieved).done(function (address_logged_user) {
+        console.log("address_logged_user = " + address_logged_user);
+        if (address_logged_user == user_address) {
+            $('#user_data_input').show();
+        }
+    });
+
+    retrieve_user_data(user_address);
+    $.when(user_data_retrieved).done(function (user_data) {
+        var output = JSON.parse(user_data);
+        if (output.Ok) {
+            console.log(output.Ok);
+        } else {
+            console.log(output.Err.Internal);
+        }
+    });
 
     retrieve_user_public_posts(user_address);
-
     $.when(public_posts_retrieved).done(function (public_posts) {
         retrieve_user_private_posts(user_address);
         $.when(private_posts_retrieved).done(function (private_posts) {
