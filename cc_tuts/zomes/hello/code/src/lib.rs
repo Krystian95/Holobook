@@ -112,13 +112,13 @@ mod hello_zome {
         };
 
         let entry = Entry::App("user_data".into(), user_data.into());
-        let address = hdk::commit_entry(&entry)?;
+        let entry_address = hdk::commit_entry(&entry)?;
 
         let agent_address = hdk::AGENT_ADDRESS.clone().into();
 
-        hdk::link_entries(&agent_address, &address, "user_has_user_data", "")?;
+        hdk::link_entries(&agent_address, &entry_address, "user_has_user_data", "")?;
 
-        Ok(address)
+        Ok(entry_address)
     }
 
     #[zome_fn("hc_public")]
@@ -152,7 +152,7 @@ mod hello_zome {
     }
 
     #[zome_fn("hc_public")]
-    pub fn retrieve_user_data(user_address: Address) -> ZomeApiResult<Vec<Post>> {
+    pub fn retrieve_user_data(user_address: Address) -> ZomeApiResult<Vec<UserData>> {
         hdk::utils::get_links_and_load_type(
             &user_address,
             LinkMatch::Exactly("user_has_user_data"),
@@ -329,7 +329,7 @@ mod hello_zome {
     fn user_data_entry_def() -> ValidatingEntryType {
         entry!(
             name: "user_data",
-            description: "User's public information",
+            description: "User's public informations",
             sharing: Sharing::Public,
             validation_package: || {
                 hdk::ValidationPackageDefinition::Entry

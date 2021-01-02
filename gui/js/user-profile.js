@@ -38,11 +38,13 @@ $('form[name="user-data-form"]').submit(function (e) {
 });
 
 function retrieve_user_data(user_address) {
-    console.log("Retriving user data");
+    console.log("Retriving user data...");
     holochain_connection.then(({callZome, close}) => {
         callZome('test-instance', 'hello', 'retrieve_user_data')({
             user_address: user_address
-        }).then(result => user_data_retrieved.resolve(result));
+        }).then(result => {
+            user_data_retrieved.resolve(result);
+        });
     });
 }
 
@@ -56,8 +58,7 @@ function create_user_data(nome, cognome, biografia) {
         }).then(result => {
             const utils = new Utils();
             utils.console_output(result);
-            user_data_retrieved = $.Deferred();
-            retrieve_user_data(user_address);
+            location.reload();
         });
     });
 }
@@ -88,23 +89,32 @@ $(document).ready(function () {
 
     const user_nickname = utils.retrieve_param_from_url("user_nickname", window.location.href);
     user_address = utils.retrieve_param_from_url("user_address", window.location.href);
-    console.log(user_nickname + ": " + user_address);
+    console.log("Profile page of: " + user_nickname + " (" + user_address + ")");
 
     $('.user_nickname').text(user_nickname);
 
-    holobook.get_agent_address(holochain_connection, address_logged_user_retrieved);
-    $.when(address_logged_user_retrieved).done(function (address_logged_user) {
-        console.log("address_logged_user = " + address_logged_user);
-        if (address_logged_user == user_address) {
-            $('#user_data_input').show();
-        }
-    });
-
     retrieve_user_data(user_address);
     $.when(user_data_retrieved).done(function (user_data) {
-        var output = JSON.parse(user_data);
+        const output = JSON.parse(user_data);
         if (output.Ok) {
+            console.log("User data = (see below)");
             console.log(output.Ok);
+            if (output.Ok.length > 0) {
+                $('#user_data .nome').text(output.Ok[0].nome);
+                $('#user_data .cognome').text(output.Ok[0].cognome);
+                $('#user_data .biografia').text(output.Ok[0].biografia);
+                $('#user_data').show();
+            } else {
+                $('#no_user_data').show();
+
+                holobook.get_agent_address(holochain_connection, address_logged_user_retrieved);
+                $.when(address_logged_user_retrieved).done(function (address_logged_user) {
+                    console.log("address_logged_user = " + address_logged_user);
+                    if (address_logged_user == user_address) {
+                        $('#user_data_input').show();
+                    }
+                });
+            }
         } else {
             console.log(output.Err.Internal);
         }
