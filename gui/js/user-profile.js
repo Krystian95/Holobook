@@ -10,7 +10,7 @@ var user_address;
 function retrieve_user_public_posts(user_address) {
     console.log("Retriving user public post");
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'holobook', 'retrieve_user_public_posts')({
+        callZome('holobook-instance', 'holobook-main', 'retrieve_user_public_posts')({
             user_address: user_address
         }).then(result => public_posts_retrieved.resolve(result));
     });
@@ -19,7 +19,7 @@ function retrieve_user_public_posts(user_address) {
 function retrieve_user_private_posts(user_address) {
     console.log("Retriving user private post");
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'holobook', 'retrieve_user_private_posts')({
+        callZome('holobook-instance', 'holobook-main', 'retrieve_user_private_posts')({
             user_address: user_address
         }).then(result => private_posts_retrieved.resolve(result));
     });
@@ -40,7 +40,7 @@ $('form[name="user-data-form"]').submit(function (e) {
 function retrieve_user_data(user_address) {
     console.log("Retriving user data...");
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'holobook', 'retrieve_user_data')({
+        callZome('holobook-instance', 'holobook-main', 'retrieve_user_data')({
             user_address: user_address
         }).then(result => {
             user_data_retrieved.resolve(result);
@@ -51,7 +51,7 @@ function retrieve_user_data(user_address) {
 function create_user_data(nome, cognome, biografia) {
     console.log("Creating user data");
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'holobook', 'create_user_data')({
+        callZome('holobook-instance', 'holobook-main', 'create_user_data')({
             nome: nome,
             cognome: cognome,
             biografia: biografia

@@ -1,0 +1,65 @@
+bridges = []
+persistence_dir = ''
+
+[[agents]]
+id = 'hc-run-agent'
+keystore_file = 'Bob'
+name = 'Bob'
+public_address = 'HcSCi6q54V833PVHd9mckeY33vCHeymwm7wnkM5UwKGnbijrC38eV3FOqqmb7za'
+test_agent = true
+
+[[dnas]]
+file = 'dist/holobook.dna.json'
+hash = 'Qme5nyn42LkjH9FGMNerK22sWsfo9wziigTV6ATA9BVD99'
+id = '__holobook'
+
+[[instances]]
+agent = 'hc-run-agent'
+dna = '__holobook'
+id = '__holobook'
+
+[instances.storage]
+type = 'memory'
+
+[[interfaces]]
+admin = false
+choose_free_port = false
+id = 'holobook_ui'
+
+[[interfaces.instances]]
+alias = 'holobook-instance'
+id = '__holobook'
+
+[interfaces.driver]
+port = 50001
+type = 'websocket'
+
+[[ui_bundles]]
+id = 'holobook_ui'
+root_dir = '../gui'
+
+[[ui_interfaces]]
+bind_address = '127.0.0.1'
+bundle = 'holobook_ui'
+dna_interface = 'holobook_ui'
+id = 'holobook_ui'
+port = 8889
+reroute_to_root = false
+
+[logger]
+state_dump = true
+type = 'debug'
+
+[logger.rules]
+rules = []
+
+[network]
+sim2h_url = 'ws://localhost:9000'
+type = 'sim2h'
+
+[passphrase_service]
+type = 'cmd'
+
+[signals]
+consistency = false
+trace = false

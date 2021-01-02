@@ -1,0 +1,17 @@
+
+bridges = []
+
+[[instances]]
+name = "holobook"
+id = "__holobook"
+dna_hash = "Qme5nyn42LkjH9FGMNerK22sWsfo9wziigTV6ATA9BVD99"
+uri = "file:dist/holobook.dna.json"
+
+[[UIs]]
+name = "Holobook"
+id = "holobook_ui"
+uri = "dir:../gui"
+
+[[UIs.instance_references]]
+ui_handle = "holobook-instance"
+instance_id = "__holobook"
