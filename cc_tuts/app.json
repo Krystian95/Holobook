@@ -1,9 +1,9 @@
 {
-  "name": "Holochain App Name",
-  "description": "A Holochain app",
+  "name": "Holobook",
+  "description": "Holobook - An alternative social network",
   "authors": [
     {
-      "identifier": "Author Name <author@name.com>",
+      "identifier": "Cristian Romanello <cristian.romanello@studio.unibo.it>, Lorenzo Lanzarone <lorenzo.lanzarone@studio.unibo.it>",
       "public_key_source": "",
       "signature": ""
     }

@@ -27,7 +27,7 @@ pub struct UserData {
 }
 
 #[zome]
-mod hello_zome {
+mod holobook_zome {
     #[init]
     fn init() {
         Ok(())

@@ -31,7 +31,7 @@ function get_dna_hash() {
 
 async function get_agent_nickname() {
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'get_agent_nickname')({}).then(result => {
+        callZome('test-instance', 'holobook', 'get_agent_nickname')({}).then(result => {
                 var json = JSON.parse(result);
                 var json_inner = JSON.parse(json.Ok);
                 agent_nickname_callback.resolve(json_inner.nick);
@@ -63,7 +63,7 @@ function resetPostForm() {
 
 function create_public_post(post_text, timestamp, author_nickname) {
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'create_public_post')({
+        callZome('test-instance', 'holobook', 'create_public_post')({
             text: post_text,
             timestamp: timestamp,
             author_nickname: author_nickname
@@ -81,7 +81,7 @@ function create_public_post(post_text, timestamp, author_nickname) {
 
 function create_private_post(post_text, timestamp, author_nickname) {
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'create_private_post')({
+        callZome('test-instance', 'holobook', 'create_private_post')({
             text: post_text,
             timestamp: timestamp,
             author_nickname: author_nickname
@@ -97,7 +97,7 @@ function create_private_post(post_text, timestamp, author_nickname) {
 function retrieve_all_public_posts() {
     console.log("Retriving public post");
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'retrieve_all_public_posts')({}).then(result => {
+        callZome('test-instance', 'holobook', 'retrieve_all_public_posts')({}).then(result => {
             let utils = new Utils();
             utils.display_post(result);
         });
@@ -106,7 +106,7 @@ function retrieve_all_public_posts() {
 
 async function retrieve_users() {
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'retrieve_users')({}).then(result => {
+        callZome('test-instance', 'holobook', 'retrieve_users')({}).then(result => {
             registered_users.resolve(result);
         });
     });
@@ -114,7 +114,7 @@ async function retrieve_users() {
 
 async function register_me(nickname) {
     holochain_connection.then(({callZome, close}) => {
-        callZome('test-instance', 'hello', 'register_me')({
+        callZome('test-instance', 'holobook', 'register_me')({
             nickname: nickname,
             timestamp: Date.now()
         }).then(result => {

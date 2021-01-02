@@ -10,7 +10,7 @@ test_agent = true
 
 [[dnas]]
 file = 'dist/cc_tuts.dna.json'
-hash = 'QmZYusn6eLQBaTUjAAhcuDcSLk9aYhsaLEoBVYMSq8HRRm'
+hash = 'QmacAGNKMNFvyjcghc169bfAuJJTaxCTRJedU36nvgLviM'
 id = '__cc_tuts'
 
 [[instances]]
