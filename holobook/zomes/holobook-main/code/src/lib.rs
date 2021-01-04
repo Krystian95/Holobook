@@ -16,6 +16,8 @@ pub struct Post {
 pub struct RegisteredUser {
     nickname: String,
     user_address: Address,
+    user_public_key: String,
+    encrypted_password_private_post: String,
     timestamp: u64,
 }
 
@@ -39,10 +41,12 @@ mod holobook_zome {
     }
 
     #[zome_fn("hc_public")]
-    pub fn register_me(nickname: String, timestamp: u64) -> ZomeApiResult<Address> {
+    pub fn register_me(nickname: String, user_public_key: String, encrypted_password_private_post: String, timestamp: u64) -> ZomeApiResult<Address> {
         let registered_user = RegisteredUser {
             nickname,
             user_address: hdk::AGENT_ADDRESS.clone(),
+            user_public_key,
+            encrypted_password_private_post,
             timestamp,
         };
 

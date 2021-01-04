@@ -58,7 +58,9 @@ function create_user_data(nome, cognome, biografia) {
         }).then(result => {
             const utils = new Utils();
             utils.console_output(result);
-            location.reload();
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
         });
     });
 }
@@ -89,7 +91,10 @@ $(document).ready(function () {
 
     const user_nickname = utils.retrieve_param_from_url("user_nickname", window.location.href);
     user_address = utils.retrieve_param_from_url("user_address", window.location.href);
+    const user_public_key = utils.retrieve_param_from_url("user_public_key", window.location.href);
     console.log("Profile page of: " + user_nickname + " (" + user_address + ")");
+    console.log("user_public_key");
+    console.log(user_public_key);
 
     $('.user_nickname').text(user_nickname);
 

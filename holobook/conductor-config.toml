@@ -10,7 +10,7 @@ test_agent = true
 
 [[dnas]]
 file = 'dist/holobook.dna.json'
-hash = 'Qme5nyn42LkjH9FGMNerK22sWsfo9wziigTV6ATA9BVD99'
+hash = 'QmcKBGgKFBRESygkfnkBkATXXT5FDBaZYwvctp2QX7QgxW'
 id = '__holobook'
 
 [[instances]]

@@ -7,7 +7,9 @@ const show_users = $.Deferred();
 const user_address_retrieved = $.Deferred();
 const dna_address_retrieved = $.Deferred();
 
+let password_private_post;
 let user_nickname;
+let user_keys;
 
 // Zome calls
 
@@ -43,7 +45,9 @@ async function get_agent_nickname() {
 $('form[name="post-form"]').submit(function (e) {
     e.preventDefault();
 
-    const post_text = $(this).find('textarea[name="post-text"]').val();
+    const utils = new Utils();
+
+    let post_text = $(this).find('textarea[name="post-text"]').val();
     const post_type = $(this).find('input[name="post-type"]:checked').val();
     const timestamp = Date.now();
 
@@ -52,6 +56,9 @@ $('form[name="post-form"]').submit(function (e) {
     if (post_type == "public") {
         create_public_post(post_text, timestamp, user_nickname);
     } else if (post_type == "private") {
+        post_text = utils.encrypt_private_post(post_text, password_private_post);
+        console.log("post_text");
+        console.log(post_text);
         create_private_post(post_text, timestamp, user_nickname);
     }
 });
@@ -112,10 +119,12 @@ async function retrieve_users() {
     });
 }
 
-async function register_me(nickname) {
+async function register_me(nickname, user_public_key, encrypted_password_private_post) {
     holochain_connection.then(({callZome, close}) => {
         callZome('holobook-instance', 'holobook-main', 'register_me')({
             nickname: nickname,
+            user_public_key: user_public_key,
+            encrypted_password_private_post: encrypted_password_private_post,
             timestamp: Date.now()
         }).then(result => {
             console.log("Registered!");
@@ -127,12 +136,22 @@ async function register_me(nickname) {
 async function display_users(result) {
     $('#users_list').empty();
     var output = JSON.parse(result);
+    var utils = new Utils();
     if (output.Ok) {
         console.log("Displaying users...");
-        var users = output.Ok.sort((a, b) => b.timestamp - a.timestamp);
+        const users = output.Ok.sort((a, b) => b.timestamp - a.timestamp);
+        let user;
         for (user of users) {
-            /*console.log(user.nickname + ": " + user.user_address);*/
-            var user_element = '<div><a href="../user-profile.html?user_address=' + user.user_address + '&user_nickname=' + user.nickname + '">' + user.nickname + '</a></div>';
+            console.log(user.nickname);
+            console.log(user.user_address);
+            console.log(user.user_public_key);
+            console.log(user.encrypted_password_private_post);
+            if (user_nickname == user.nickname) {
+                password_private_post = utils.decrypt(user.encrypted_password_private_post, user_keys);
+                console.log("password_private_post");
+                console.log(password_private_post);
+            }
+            var user_element = '<div><a href="../user-profile.html?user_address=' + user.user_address + '&user_nickname=' + user.nickname + '&user_public_key=' + user.user_public_key + '">' + user.nickname + '</a></div>';
             $('#users_list').append(user_element);
         }
     } else {
@@ -151,6 +170,14 @@ async function set_agent_is_registered(agent_nickname, registered_users) {
 }
 
 $(document).ready(function () {
+    var utils = new Utils();
+
+    var pass_phrase_utente = "user_password_123";
+    user_keys = utils.generate_keys(pass_phrase_utente);
+    var user_public_key = cryptico.publicKeyString(user_keys);
+
+    console.log("user_public_key");
+    console.log(user_public_key);
     retrieve_all_public_posts();
 
     get_agent_nickname();
@@ -166,7 +193,13 @@ $(document).ready(function () {
                 $.when(user_is_registered).done(function (result_user_is_registered) {
                     if (!result_user_is_registered) {
                         console.log(result_agent_nickname + " is not registered. Registering now...");
-                        register_me(result_agent_nickname);
+                        var password_private_post = utils.generate_random_password(60);
+                        var encrypted_password_private_post = utils.encrypt(password_private_post, user_public_key, user_keys);
+                        console.log("password_private_post");
+                        console.log(password_private_post);
+                        console.log("encrypted_password_private_post");
+                        console.log(encrypted_password_private_post);
+                        register_me(result_agent_nickname, user_public_key, encrypted_password_private_post);
                     } else {
                         console.log(result_agent_nickname + " is already registered.");
                         show_users.resolve(true);
