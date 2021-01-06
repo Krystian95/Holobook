@@ -2,18 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0c2adec3-e32e-4641-b0cb-141f39e1c8cc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/gui/css/dark.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/js/Init.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/lib/cryptico-js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/gui/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/js/Utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/Utils.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/js/user-profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/user-profile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/lib/cryptico-js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/lib/cryptico-js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/lib/cryptico-js/dist/cryptico.amd.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/lib/cryptico-js/dist/cryptico.amd.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/lib/cryptico-js/dist/cryptico.browser.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/lib/cryptico-js/dist/cryptico.browser.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/lib/cryptico-js/lib/cryptico.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/lib/cryptico-js/lib/cryptico.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/lib/cryptico-js/src/jsbn.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/lib/cryptico-js/src/jsbn.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/user-profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/gui/user-profile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/holobook/bundle.toml" beforeDir="false" afterPath="$PROJECT_DIR$/holobook/bundle.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/holobook/conductor-config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/holobook/conductor-config.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/holobook/zomes/holobook-main/code/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/holobook/zomes/holobook-main/code/src/lib.rs" afterDir="false" />
@@ -100,7 +99,9 @@
       <workItem from="1609610855982" duration="2218000" />
       <workItem from="1609700711047" duration="1134000" />
       <workItem from="1609782728699" duration="294000" />
-      <workItem from="1609783259584" duration="6005000" />
+      <workItem from="1609783259584" duration="6340000" />
+      <workItem from="1609868827961" duration="5580000" />
+      <workItem from="1609955276325" duration="5509000" />
     </task>
     <servers />
   </component>

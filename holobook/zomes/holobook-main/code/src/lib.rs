@@ -28,6 +28,11 @@ pub struct UserData {
     biografia: String
 }
 
+#[derive(Serialize, Deserialize, Debug, DefaultJson, Clone)]
+pub struct AmicoPiuStretto {
+    encrypted_password_private_post: String,
+}
+
 #[zome]
 mod holobook_zome {
     #[init]
@@ -108,6 +113,23 @@ mod holobook_zome {
     }
 
     #[zome_fn("hc_public")]
+    pub fn create_amico_piu_stretto(encrypted_password_private_post: String, relationship: String) -> ZomeApiResult<Address> {
+        let amico_piu_stretto = AmicoPiuStretto {
+            encrypted_password_private_post,
+        };
+
+        let entry = Entry::App("amico_piu_stretto".into(), amico_piu_stretto.into());
+        let entry_address = hdk::commit_entry(&entry)?;
+
+        let anchor_entry = Entry::App("anchor_amico_piu_stretto".into(), "amico_piu_stretto".into());
+        let anchor_address = hdk::commit_entry(&anchor_entry)?;
+
+        hdk::link_entries(&anchor_address, &entry_address, "anchor_amico_piu_stretto_has_amico_piu_stretto", &relationship)?;
+
+        Ok(entry_address)
+    }
+
+    #[zome_fn("hc_public")]
     pub fn create_user_data(nome: String, cognome: String, biografia: String) -> ZomeApiResult<Address> {
         let user_data = UserData {
             nome,
@@ -177,6 +199,18 @@ mod holobook_zome {
     }
 
     #[zome_fn("hc_public")]
+    pub fn retrieve_amico_piu_stretto(relationship: String) -> ZomeApiResult<Vec<AmicoPiuStretto>> {
+        let anchor_entry = Entry::App("anchor_amico_piu_stretto".into(), "amico_piu_stretto".into());
+        let anchor_address = hdk::commit_entry(&anchor_entry)?;
+
+        hdk::utils::get_links_and_load_type(
+            &anchor_address,
+            LinkMatch::Exactly("anchor_amico_piu_stretto_has_amico_piu_stretto"),
+            LinkMatch::Exactly(&relationship),
+        )
+    }
+
+    #[zome_fn("hc_public")]
     pub fn get_agent_id() -> ZomeApiResult<Address> {
         Ok(hdk::AGENT_ADDRESS.clone())
     }
@@ -213,6 +247,70 @@ mod holobook_zome {
                     validation: |_validation_data: hdk::LinkValidationData| {
                         Ok(())
                     }
+                )
+            ]
+        )
+    }
+
+    #[entry_def]
+    fn anchor_amico_piu_stretto_entry_def() -> ValidatingEntryType {
+        entry!(
+            name: "anchor_amico_piu_stretto",
+            description: "Anchor to all 'Amico più stretto' entries",
+            sharing: Sharing::Public,
+            validation_package: || {
+                hdk::ValidationPackageDefinition::Entry
+            },
+            validation: |_validation_data: hdk::EntryValidationData<String>| {
+                Ok(())
+            },
+            links: [
+                to!(
+                    "amico_piu_stretto",
+                    link_type: "anchor_amico_piu_stretto_has_amico_piu_stretto",
+                    validation_package: || {
+                        hdk::ValidationPackageDefinition::Entry
+                    },
+                    validation: |_validation_data: hdk::LinkValidationData| {
+                        Ok(())
+                    }
+                )
+            ]
+        )
+    }
+
+    #[entry_def]
+    fn amico_piu_stretto_entry_def() -> ValidatingEntryType {
+        entry!(
+            name: "amico_piu_stretto",
+            description: "An 'Amico più stretto' entry",
+            sharing: Sharing::Public,
+            validation_package: || {
+                hdk::ValidationPackageDefinition::Entry
+            },
+            validation: | validation_data: hdk::EntryValidationData<AmicoPiuStretto>| {
+                match validation_data {
+                    hdk::EntryValidationData::Create{ entry, .. } => {
+                        const MAX_LENGTH: usize = 999;
+                        if entry.encrypted_password_private_post.len() <= MAX_LENGTH {
+                           Ok(())
+                        } else {
+                           Err("Cipher too long".into())
+                        }
+                    },
+                    _ => Ok(()),
+                }
+            },
+            links: [
+                from!(
+                   "anchor_amico_piu_stretto",
+                   link_type: "anchor_amico_piu_stretto_has_amico_piu_stretto",
+                   validation_package: || {
+                       hdk::ValidationPackageDefinition::Entry
+                   },
+                   validation: |_validation_data: hdk::LinkValidationData| {
+                       Ok(())
+                   }
                 )
             ]
         )
@@ -297,7 +395,7 @@ mod holobook_zome {
         entry!(
             name: "private_post",
             description: "A Holobook private post",
-            sharing: Sharing::Private,
+            sharing: Sharing::Public,
             validation_package: || {
                 hdk::ValidationPackageDefinition::Entry
             },

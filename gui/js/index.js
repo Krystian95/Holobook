@@ -135,8 +135,8 @@ async function register_me(nickname, user_public_key, encrypted_password_private
 
 async function display_users(result) {
     $('#users_list').empty();
-    var output = JSON.parse(result);
-    var utils = new Utils();
+    const output = JSON.parse(result);
+    const utils = new Utils();
     if (output.Ok) {
         console.log("Displaying users...");
         const users = output.Ok.sort((a, b) => b.timestamp - a.timestamp);
@@ -151,7 +151,8 @@ async function display_users(result) {
                 console.log("password_private_post");
                 console.log(password_private_post);
             }
-            var user_element = '<div><a href="../user-profile.html?user_address=' + user.user_address + '&user_nickname=' + user.nickname + '&user_public_key=' + user.user_public_key + '">' + user.nickname + '</a></div>';
+            const url = "../user-profile.html?user_address=" + encodeURI(user.user_address) + "&user_nickname=" + encodeURI(user.nickname) + "&user_public_key=" + encodeURI(user.user_public_key);
+            const user_element = '<div><a href="' + url + '">' + user.nickname + '</a></div>';
             $('#users_list').append(user_element);
         }
     } else {
@@ -162,6 +163,7 @@ async function display_users(result) {
 async function set_agent_is_registered(agent_nickname, registered_users) {
     $.each(registered_users, function (index, registered_user) {
         if (registered_user.nickname == agent_nickname) {
+            sessionStorage.setItem("encrypted_password_private_post", registered_user.encrypted_password_private_post);
             user_is_registered.resolve(true);
         }
     });
@@ -170,11 +172,12 @@ async function set_agent_is_registered(agent_nickname, registered_users) {
 }
 
 $(document).ready(function () {
-    var utils = new Utils();
+    const utils = new Utils();
 
-    var pass_phrase_utente = "user_password_123";
+    const pass_phrase_utente = "user_password_123";
     user_keys = utils.generate_keys(pass_phrase_utente);
-    var user_public_key = cryptico.publicKeyString(user_keys);
+    sessionStorage.setItem("pass_phrase_utente", pass_phrase_utente);
+    const user_public_key = cryptico.publicKeyString(user_keys);
 
     console.log("user_public_key");
     console.log(user_public_key);
@@ -193,8 +196,9 @@ $(document).ready(function () {
                 $.when(user_is_registered).done(function (result_user_is_registered) {
                     if (!result_user_is_registered) {
                         console.log(result_agent_nickname + " is not registered. Registering now...");
-                        var password_private_post = utils.generate_random_password(60);
-                        var encrypted_password_private_post = utils.encrypt(password_private_post, user_public_key, user_keys);
+                        password_private_post = utils.generate_random_password(60);
+                        const encrypted_password_private_post = utils.encrypt(password_private_post, user_public_key, user_keys);
+                        sessionStorage.setItem("encrypted_password_private_post", encrypted_password_private_post);
                         console.log("password_private_post");
                         console.log(password_private_post);
                         console.log("encrypted_password_private_post");

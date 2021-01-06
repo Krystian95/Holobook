@@ -69,18 +69,27 @@ Utils.prototype.generate_keys = function (pass_phrase) {
 }
 
 Utils.prototype.encrypt = function (message, receiver_public_key, user_keys) {
-    var encryption_result = cryptico.encrypt(message, receiver_public_key, user_keys);
+    const encryption_result = cryptico.encrypt(message, receiver_public_key, user_keys);
     return encryption_result.cipher;
 }
 
 Utils.prototype.decrypt = function (cipher, user_keys) {
-    var decryption_result = cryptico.decrypt(cipher, user_keys);
+    console.log("cipher");
+    console.log(cipher);
+    console.log("user_keys");
+    console.log(user_keys);
+    const decryption_result = cryptico.decrypt(cipher, user_keys);
     return decryption_result.plaintext;
 }
 
 Utils.prototype.encrypt_private_post = function (private_post, private_post_password) {
     const cipher_private_post = CryptoJS.AES.encrypt(private_post, private_post_password);
     return cipher_private_post.toString();
+}
+
+Utils.prototype.decrypt_private_post = function (cipher_private_post, private_post_password) {
+    const plain_text_private_post = CryptoJS.AES.decrypt(cipher_private_post, private_post_password);
+    return plain_text_private_post.toString(CryptoJS.enc.Utf8);
 }
 
 Utils.prototype.test_cryptico_cryptojs = function () {

@@ -4,7 +4,7 @@ bridges = []
 [[instances]]
 name = "holobook"
 id = "__holobook"
-dna_hash = "QmcKBGgKFBRESygkfnkBkATXXT5FDBaZYwvctp2QX7QgxW"
+dna_hash = "QmU2n1d25YAfVYnwwkhHXxsts3yb74pMkkLg2PhD6gZe8r"
 uri = "file:dist/holobook.dna.json"
 
 [[UIs]]
