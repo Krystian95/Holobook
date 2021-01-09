@@ -54,6 +54,8 @@ $('form[name="post-form"]').submit(function (e) {
 
     console.log(timestamp + " " + post_type + " " + post_text + " " + user_nickname);
 
+    $(".loader").show();
+
     if (post_type == "public") {
         create_public_post(post_text, timestamp, user_nickname);
     } else if (post_type == "private") {
@@ -84,6 +86,7 @@ function create_public_post(post_text, timestamp, author_nickname) {
             resetPostForm();
             setTimeout(() => {
                 retrieve_all_public_posts();
+                $(".loader").hide();
             }, 3000);
         });
     });
@@ -96,6 +99,7 @@ function create_private_post(post_text, timestamp, author_nickname) {
             timestamp: timestamp,
             author_nickname: author_nickname
         }).then(result => {
+            $(".loader").hide();
             console.log("Private post created");
             const utils = new Utils();
             utils.console_output(result);
@@ -169,31 +173,14 @@ $(document).ready(function () {
 
     retrieve_users();
     $.when(retrieve_users_deferred).done(function (registered_users) {
+        $(".loader").hide();
         const result = JSON.parse(registered_users);
         if (result.Ok) {
             display_users(registered_users);
-            console.log("password_private_post");
-            console.log(password_private_post);
-            console.log("encrypted_password_private_post");
-            console.log(sessionStorage.getItem("encrypted_password_private_post"));
-
-            /*const bob_public_key = "YRMBz5PIp6Mea38dVsgwVswKz5vH+cfZZ+m3XK73o3EUiMmcWYsZtyMGxVfrqHIPhlWESIUkmou/Ci9ADCvVvw==";
-            const alice_password_private_post = "[?@yP404SzB85MEzvK>;e5qcaS>wxtJfaéx%:TlpFl4co#*7thBWsIOZefI^";
-            console.log("alice_password_private_post encrypted for bob");
-            console.log(utils.encrypt(alice_password_private_post, bob_public_key, user_keys));*/
-
-            const encrypted_alice_password_private_post = "SlTJSXWazbuIz6OeIbtY8DrsHsbmjxo9u9cSqseg9cqC557FfCY5RE2Gysh4qWx7IhSQK6JTCBK3A6ptllK/?I3a82DqyJhg9L1GlVDs1TVQ3VKFruf6Y4s3Q6tHJHB2C3Aa25MuD+85+Qp8yXJzmhksXXOhenn8JEey0BNSnckOOmmFcng/khtLKnHQ5TNE=";
-            console.log("alice_password_private_post plain for bob");
-            console.log(utils.decrypt(encrypted_alice_password_private_post, user_keys));
         } else {
             console.log(output.Err.Internal);
         }
     });
 
     retrieve_all_public_posts();
-
-    setTimeout(() => {
-        utils.test_cryptico_cryptojs_2();
-    }, 5000);
-
 });

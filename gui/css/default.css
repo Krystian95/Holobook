@@ -5,3 +5,44 @@ body {
 .hide {
     display: none;
 }
+
+/* Loader */
+.loader {
+    background-color: #cccccce8;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 9999;
+}
+
+.loader-spinner {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    top: 35%;
+    left: 45%;
+    position: absolute;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 0.7s linear infinite; /* Safari */
+    animation: spin 0.7s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

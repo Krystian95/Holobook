@@ -2,65 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0c2adec3-e32e-4641-b0cb-141f39e1c8cc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/gui/css/default.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/home.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/js/home.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-grid.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-grid.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-grid.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-grid.min.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-grid.rtl.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-grid.rtl.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-grid.rtl.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-grid.rtl.min.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-reboot.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-reboot.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-reboot.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-reboot.min.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-reboot.rtl.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-reboot.rtl.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-reboot.rtl.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-reboot.rtl.min.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-utilities.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-utilities.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-utilities.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-utilities.min.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-utilities.rtl.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-utilities.rtl.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-utilities.rtl.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap-utilities.rtl.min.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap.min.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap.rtl.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap.rtl.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap.rtl.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/css/bootstrap.rtl.min.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/js/bootstrap.bundle.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/js/bootstrap.bundle.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/js/bootstrap.bundle.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/js/bootstrap.bundle.min.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/js/bootstrap.esm.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/js/bootstrap.esm.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/js/bootstrap.esm.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/js/bootstrap.esm.min.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/js/bootstrap.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/js/bootstrap.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/js/bootstrap.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/bootstrap-5.0.0-beta1-dist/js/bootstrap.min.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/css/dark.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/css/default.css" beforeDir="false" afterPath="$PROJECT_DIR$/gui/css/default.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/gui/home.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/gui/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/js/Utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/Utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/js/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/home.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/js/user-profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/user-profile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/lib/cryptico-js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/lib/jquery-3.5.1.min.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/user-profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/gui/user-profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/holobook/bundle.toml" beforeDir="false" afterPath="$PROJECT_DIR$/holobook/bundle.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/holobook/conductor-config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/holobook/conductor-config.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/holobook/zomes/holobook-main/code/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/holobook/zomes/holobook-main/code/src/lib.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,9 +23,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="JavaScript File" />
         <option value="CSS File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -151,7 +101,7 @@
       <workItem from="1610041850399" duration="6461000" />
       <workItem from="1610128040568" duration="6429000" />
       <workItem from="1610210457541" duration="192000" />
-      <workItem from="1610214928904" duration="2035000" />
+      <workItem from="1610214928904" duration="4884000" />
     </task>
     <servers />
   </component>

@@ -51,6 +51,7 @@ $('form[name="user-data-form"]').submit(function (e) {
 
     console.log(nome + " " + cognome + " " + biografia);
 
+    $(".loader").show();
     create_user_data(nome, cognome, biografia)
 });
 
@@ -87,7 +88,7 @@ function add_as_close_friend(encrypted_password_private_post, relationship) {
         }).then(result => {
             console.log(result);
             setTimeout(() => {
-                /*location.reload();*/
+                location.reload();
             }, 2000);
         });
     });
@@ -137,6 +138,7 @@ $(document).ready(function () {
             console.log(profile_user_public_key);
         } else {
             console.log(output.Err.Internal);
+            window.location.href = 'home.html';
         }
     });
 
@@ -179,6 +181,14 @@ $(document).ready(function () {
                 if (output.Ok.length > 0) {
                     user_profile_encrypted_password_private_post = output.Ok[0].encrypted_password_private_post;
                     logged_user_has_been_added_by_user_profile = true;
+                    if (logged_user_address != profile_user_address) {
+                        $("#logged_user_as_close_friend").text(user_nickname + " ti ha aggiunto come suo Amico più stretto");
+                    }
+                } else {
+                    if (logged_user_address != profile_user_address) {
+                        $("#logged_user_as_close_friend").text(user_nickname + " non ti ha aggiunto come suo Amico più stretto");
+                        $("#logged_user_as_close_friend_post_alert").text("Potrai visualizzare i post privati di " + user_nickname + " solo dopo che ti avrà aggiunto come Amico più stretto")
+                    }
                 }
 
                 retrieve_user_data(profile_user_address);
@@ -245,9 +255,11 @@ $(document).ready(function () {
                             }
 
                             utils.display_post(JSON.stringify(all_posts));
+                            $(".loader").hide();
                         });
                     } else {
                         utils.display_post(JSON.stringify(all_posts));
+                        $(".loader").hide();
                     }
                 });
             });
@@ -255,6 +267,7 @@ $(document).ready(function () {
     });
 
     $('#add-as-close-friend').click(function (e) {
+        $(".loader").show();
         console.log("password_private_post");
         console.log(sessionStorage.getItem("password_private_post"));
         console.log("profile_user_public_key");
