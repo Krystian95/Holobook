@@ -46,10 +46,11 @@ mod holobook_zome {
     }
 
     #[zome_fn("hc_public")]
-    pub fn register_me(nickname: String, user_public_key: String, encrypted_password_private_post: String, timestamp: u64) -> ZomeApiResult<Address> {
+    pub fn register_me(nickname: String, user_public_key: String, encrypted_password_private_post: String, timestamp: u64, agent_address: String) -> ZomeApiResult<Address> {
+        let agent_address_t = hdk::AGENT_ADDRESS.clone().into();
         let registered_user = RegisteredUser {
             nickname,
-            user_address: hdk::AGENT_ADDRESS.clone(),
+            user_address: agent_address_t,
             user_public_key,
             encrypted_password_private_post,
             timestamp,
@@ -61,7 +62,7 @@ mod holobook_zome {
         let anchor_entry = Entry::App("anchor_registered_user".into(), "registered_user".into());
         let anchor_address = hdk::commit_entry(&anchor_entry)?;
 
-        hdk::link_entries(&anchor_address, &entry_address, "has_registered_user", "")?;
+        hdk::link_entries(&anchor_address, &entry_address, "has_registered_user", &agent_address)?;
 
         Ok(entry_address)
     }
@@ -195,6 +196,18 @@ mod holobook_zome {
             &anchor_address,
             LinkMatch::Exactly("has_registered_user"),
             LinkMatch::Any,
+        )
+    }
+
+    #[zome_fn("hc_public")]
+    pub fn retrieve_user_with_tag(user_address: String) -> ZomeApiResult<Vec<RegisteredUser>> {
+        let anchor_entry = Entry::App("anchor_registered_user".into(), "registered_user".into());
+        let anchor_address = hdk::commit_entry(&anchor_entry)?;
+
+        hdk::utils::get_links_and_load_type(
+            &anchor_address,
+            LinkMatch::Exactly("has_registered_user"),
+            LinkMatch::Exactly(&user_address),
         )
     }
 

@@ -1,3 +1,8 @@
+
+if(sessionStorage.getItem("pass_phrase_utente") == null || sessionStorage.getItem("pass_phrase_utente") == 'undefined'){
+    window.location.href = 'index.html';
+}
+
 const holochain_connection = holochainclient.connect();
 
 const public_posts_retrieved = $.Deferred();
@@ -5,6 +10,7 @@ const private_posts_retrieved = $.Deferred();
 const address_logged_user_retrieved = $.Deferred();
 let user_data_retrieved = $.Deferred();
 let close_friend_retrieved = $.Deferred();
+let retrieve_user_profile_registered_entry_deferred = $.Deferred();
 
 let logged_user_address;
 
@@ -23,6 +29,16 @@ function retrieve_user_private_posts(user_address) {
         callZome('holobook-instance', 'holobook-main', 'retrieve_user_private_posts')({
             user_address: user_address
         }).then(result => private_posts_retrieved.resolve(result));
+    });
+}
+
+async function retrieve_user_with_tag(user_address) {
+    holochain_connection.then(({callZome, close}) => {
+        callZome('holobook-instance', 'holobook-main', 'retrieve_user_with_tag')({
+            user_address: user_address
+        }).then(result => {
+            retrieve_user_profile_registered_entry_deferred.resolve(result);
+        });
     });
 }
 
@@ -69,8 +85,9 @@ function add_as_close_friend(encrypted_password_private_post, relationship) {
             encrypted_password_private_post: encrypted_password_private_post,
             relationship: relationship
         }).then(result => {
+            console.log(result);
             setTimeout(() => {
-                location.reload();
+                /*location.reload();*/
             }, 2000);
         });
     });
@@ -100,14 +117,29 @@ $(document).ready(function () {
 
     const user_nickname = utils.retrieve_param_from_url("user_nickname", window.location.href);
     const profile_user_address = utils.retrieve_param_from_url("user_address", window.location.href);
-    const user_public_key = utils.retrieve_param_from_url("user_public_key", window.location.href);
+
     console.log("Profile page of: " + user_nickname + " (" + profile_user_address + ")");
-    console.log("user_public_key");
-    console.log(user_public_key);
 
-    const encrypted_password_private_post = sessionStorage.getItem('encrypted_password_private_post');
+    let pass_phrase_utente = sessionStorage.getItem('pass_phrase_utente');
+    console.log("pass_phrase_utente");
+    console.log(pass_phrase_utente);
 
-    const pass_phrase_utente = sessionStorage.getItem('pass_phrase_utente');
+    let profile_user_public_key;
+
+    retrieve_user_with_tag(profile_user_address);
+    $.when(retrieve_user_profile_registered_entry_deferred).done(function (registered_user) {
+        console.log("registered_user");
+        console.log(registered_user);
+        const output = JSON.parse(registered_user);
+        if (output.Ok) {
+            profile_user_public_key = output.Ok[0].user_public_key;
+            console.log("profile_user_public_key");
+            console.log(profile_user_public_key);
+        } else {
+            console.log(output.Err.Internal);
+        }
+    });
+
     const user_keys = utils.generate_keys(pass_phrase_utente);
     console.log("user_keys");
     console.log(user_keys);
@@ -140,6 +172,8 @@ $(document).ready(function () {
             const relationship_logged_user_has_been_added_by_user_profile = profile_user_address + "->" + logged_user_address;
             retrieve_close_friend(relationship_logged_user_has_been_added_by_user_profile);
             $.when(close_friend_retrieved).done(function (entry_logged_user_has_been_added_by_user_profile) {
+                console.log("entry_logged_user_has_been_added_by_user_profile");
+                console.log(entry_logged_user_has_been_added_by_user_profile);
                 const output = JSON.parse(entry_logged_user_has_been_added_by_user_profile);
                 let logged_user_has_been_added_by_user_profile = false;
                 if (output.Ok.length > 0) {
@@ -183,11 +217,15 @@ $(document).ready(function () {
                             const output_private_posts = JSON.parse(private_posts);
 
                             if (output_private_posts.Ok.length > 0) {
-                                let password_private_post
+                                let password_private_post;
                                 if (logged_user_address == profile_user_address) {
                                     const logged_user_encrypted_password_private_post = sessionStorage.getItem("encrypted_password_private_post");
                                     password_private_post = utils.decrypt(logged_user_encrypted_password_private_post, user_keys);
                                 } else {
+                                    console.log("user_profile_encrypted_password_private_post");
+                                    console.log(user_profile_encrypted_password_private_post);
+                                    console.log("user_keys");
+                                    console.log(user_keys);
                                     password_private_post = utils.decrypt(user_profile_encrypted_password_private_post, user_keys);
                                 }
 
@@ -217,7 +255,14 @@ $(document).ready(function () {
     });
 
     $('#add-as-close-friend').click(function (e) {
+        console.log("password_private_post");
+        console.log(sessionStorage.getItem("password_private_post"));
+        console.log("profile_user_public_key");
+        console.log(profile_user_public_key);
+        const encrypted_password_private_post = utils.encrypt(sessionStorage.getItem("password_private_post"), profile_user_public_key, user_keys);
         const relationship_logged_user_has_added_user_profile = logged_user_address + "->" + profile_user_address;
+        console.log(encrypted_password_private_post);
+        console.log(relationship_logged_user_has_added_user_profile);
         add_as_close_friend(encrypted_password_private_post, relationship_logged_user_has_added_user_profile);
     });
 });
