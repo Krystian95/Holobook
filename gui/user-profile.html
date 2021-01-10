@@ -25,6 +25,20 @@
     Profilo di <span class="user_nickname"></span>
 </h3>
 
+<div id="post-form" class="hide">
+    <h3>Pubblica post</h3>
+    <form name="post-form" onSubmit="return false;">
+        <textarea name="post-text" placeholder="A cosa stai pensando?" required></textarea>
+
+        <input type="radio" id="public" name="post-type" value="public" checked required>
+        <label for="public">Pubblico</label><br>
+        <input type="radio" id="private" name="post-type" value="private">
+        <label for="private">Privato</label><br>
+
+        <button type="submit">Pubblica</button>
+    </form>
+</div>
+
 <div>
     <button type="button" class="hide" id="add-as-close-friend">Aggiungi agli amici più stretti</button>
     <button type="button" class="hide" id="remove-as-close-friend" disabled>Aggiunto agli amici più stretti</button>

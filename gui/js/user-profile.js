@@ -13,6 +13,8 @@ let close_friend_retrieved = $.Deferred();
 let retrieve_user_profile_registered_entry_deferred = $.Deferred();
 
 let logged_user_address;
+let user_nickname;
+let password_private_post;
 
 function retrieve_user_public_posts(user_address) {
     console.log("Retriving user public post");
@@ -111,12 +113,24 @@ function create_user_data(nome, cognome, biografia) {
     });
 }
 
+$('form[name="post-form"]').submit(function (e) {
+    e.preventDefault();
+
+    $(".loader").show();
+
+    let post_text = $(this).find('textarea[name="post-text"]').val();
+    const post_type = $(this).find('input[name="post-type"]:checked').val();
+
+    const holobook = new Holobook();
+    holobook.create_post(post_text, post_type, user_nickname, password_private_post);
+});
+
 $(document).ready(function () {
 
     const utils = new Utils();
     const holobook = new Holobook();
 
-    const user_nickname = utils.retrieve_param_from_url("user_nickname", window.location.href);
+    user_nickname = utils.retrieve_param_from_url("user_nickname", window.location.href);
     const profile_user_address = utils.retrieve_param_from_url("user_address", window.location.href);
 
     console.log("Profile page of: " + user_nickname + " (" + profile_user_address + ")");
@@ -154,6 +168,12 @@ $(document).ready(function () {
     $.when(address_logged_user_retrieved).done(function (logged_user_address_temp) {
         logged_user_address = logged_user_address_temp
         console.log("logged_user_address = " + logged_user_address);
+
+        if (logged_user_address == profile_user_address) {
+            const logged_user_encrypted_password_private_post = sessionStorage.getItem("encrypted_password_private_post");
+            password_private_post = utils.decrypt(logged_user_encrypted_password_private_post, user_keys);
+            $("#post-form").show();
+        }
 
         var relationship_logged_user_has_added_user_profile = logged_user_address + "->" + profile_user_address;
         retrieve_close_friend(relationship_logged_user_has_added_user_profile);
@@ -227,7 +247,6 @@ $(document).ready(function () {
                             const output_private_posts = JSON.parse(private_posts);
 
                             if (output_private_posts.Ok.length > 0) {
-                                let password_private_post;
                                 if (logged_user_address == profile_user_address) {
                                     const logged_user_encrypted_password_private_post = sessionStorage.getItem("encrypted_password_private_post");
                                     password_private_post = utils.decrypt(logged_user_encrypted_password_private_post, user_keys);

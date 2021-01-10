@@ -46,67 +46,14 @@ async function get_agent_nickname() {
 $('form[name="post-form"]').submit(function (e) {
     e.preventDefault();
 
-    const utils = new Utils();
+    $(".loader").show();
 
     let post_text = $(this).find('textarea[name="post-text"]').val();
     const post_type = $(this).find('input[name="post-type"]:checked').val();
-    const timestamp = Date.now();
 
-    console.log(timestamp + " " + post_type + " " + post_text + " " + user_nickname);
-
-    $(".loader").show();
-
-    if (post_type == "public") {
-        create_public_post(post_text, timestamp, user_nickname);
-    } else if (post_type == "private") {
-        console.log("password_private_post");
-        console.log(password_private_post);
-        post_text = utils.encrypt_private_post(post_text, password_private_post);
-        console.log("post_text");
-        console.log(post_text);
-        create_private_post(post_text, timestamp, user_nickname);
-    }
+    const holobook = new Holobook();
+    holobook.create_post(post_text, post_type, user_nickname, password_private_post);
 });
-
-function resetPostForm() {
-    $('form[name="post-form"]').find('textarea[name="post-text"]').val('');
-    $('form[name="post-form"]').find('input[name="post-type"][id="public"]').prop("checked", true);
-}
-
-function create_public_post(post_text, timestamp, author_nickname) {
-    holochain_connection.then(({callZome, close}) => {
-        callZome('holobook-instance', 'holobook-main', 'create_public_post')({
-            text: post_text,
-            timestamp: timestamp,
-            author_nickname: author_nickname
-        }).then(result => {
-            console.log("Public post created");
-            const utils = new Utils();
-            utils.console_output(result);
-            resetPostForm();
-            setTimeout(() => {
-                retrieve_all_public_posts();
-                $(".loader").hide();
-            }, 3000);
-        });
-    });
-}
-
-function create_private_post(post_text, timestamp, author_nickname) {
-    holochain_connection.then(({callZome, close}) => {
-        callZome('holobook-instance', 'holobook-main', 'create_private_post')({
-            text: post_text,
-            timestamp: timestamp,
-            author_nickname: author_nickname
-        }).then(result => {
-            $(".loader").hide();
-            console.log("Private post created");
-            const utils = new Utils();
-            utils.console_output(result);
-            resetPostForm();
-        });
-    });
-}
 
 function retrieve_all_public_posts() {
     console.log("Retriving public post");

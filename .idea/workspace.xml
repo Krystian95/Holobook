@@ -3,11 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="0c2adec3-e32e-4641-b0cb-141f39e1c8cc" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/css/default.css" beforeDir="false" afterPath="$PROJECT_DIR$/gui/css/default.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/gui/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/gui/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/js/Holobook.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/Holobook.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/js/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/js/user-profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/user-profile.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/user-profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/gui/user-profile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/holobook/conductor-config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/holobook/conductor-config.toml" afterDir="false" />
@@ -101,7 +98,8 @@
       <workItem from="1610041850399" duration="6461000" />
       <workItem from="1610128040568" duration="6429000" />
       <workItem from="1610210457541" duration="192000" />
-      <workItem from="1610214928904" duration="4884000" />
+      <workItem from="1610214928904" duration="5029000" />
+      <workItem from="1610300217412" duration="1132000" />
     </task>
     <servers />
   </component>
