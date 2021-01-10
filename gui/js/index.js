@@ -34,16 +34,6 @@ async function register_me(nickname, user_public_key, encrypted_password_private
     });
 }
 
-async function retrieve_user_with_tag(user_address) {
-    holochain_connection.then(({callZome, close}) => {
-        callZome('holobook-instance', 'holobook-main', 'retrieve_user_with_tag')({
-            user_address: user_address
-        }).then(result => {
-            user_is_registered_deferred.resolve(result);
-        });
-    });
-}
-
 $(document).ready(function () {
     const utils = new Utils();
     const password_private_post = utils.generate_random_password(60);
@@ -57,19 +47,15 @@ $(document).ready(function () {
         console.log("agent_id = " + agent_id);
         agent_address = agent_id;
 
-        retrieve_user_with_tag(agent_address);
+        holobook.retrieve_user_with_tag(agent_address, user_is_registered_deferred);
         $.when(user_is_registered_deferred).done(function (registered_user) {
+            console.log("registered_user");
             console.log(registered_user);
-            const output = JSON.parse(registered_user);
-            if (output.Ok) {
-                if (output.Ok.length > 0) {
-                    user_is_registered = true;
-                    console.log("User already registered");
-                } else {
-                    console.log("User is not registered");
-                }
+            if (registered_user.length > 0) {
+                user_is_registered = true;
+                console.log("User already registered");
             } else {
-                console.log(registered_user);
+                console.log("User is not registered");
             }
         });
 

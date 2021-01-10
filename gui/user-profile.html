@@ -51,9 +51,10 @@
 <div>
     <h3>Informazioni</h3>
     <div id="user_data_input" class="hide">
-        <p><span class="user_nickname"></span>, non hai alcuna informazione pubblica salvata. Racconta qualcosa su di
-            te:</p>
         <form name="user-data-form" onSubmit="return false;">
+            <p><span class="user_nickname"></span>, non hai alcuna informazione salvata. Racconta qualcosa su di
+                te:</p>
+
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="nome" placeholder="Nome" required>
             </div>
@@ -63,6 +64,19 @@
             <div class="input-group">
                 <textarea class="form-control" name="biografia" placeholder="Biografia"></textarea>
             </div>
+
+            <p>Rendi disponibili alcune altre informazioni private solamente ai tuoi Amici più stretti:</p>
+
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="data_nascita" placeholder="Data di nascita" required>
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="email" placeholder="Email" required>
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="cellulare" placeholder="Cellulare" required>
+            </div>
+
             <button type="submit" class="btn btn-primary">Salva</button>
         </form>
     </div>
@@ -73,6 +87,12 @@
         <p>Nome: <b class="nome"></b></p>
         <p>Cognome: <b class="cognome"></b></p>
         <p>Biografia: <span class="biografia"></span></p>
+
+        <div id="user_private_date" class="hide">
+            <p>Data di nascita: <b class="data_nascita"></b> [private]</p>
+            <p>Email: <b class="email"></b> [private]</p>
+            <p>Cellulare: <b class="cellulare"></b> [private]</p>
+        </div>
     </div>
 </div>
 

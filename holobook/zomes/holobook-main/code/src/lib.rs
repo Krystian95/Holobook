@@ -22,10 +22,17 @@ pub struct RegisteredUser {
 }
 
 #[derive(Serialize, Deserialize, Debug, DefaultJson, Clone)]
-pub struct UserData {
+pub struct PublicUserData {
     nome: String,
     cognome: String,
     biografia: String
+}
+
+#[derive(Serialize, Deserialize, Debug, DefaultJson, Clone)]
+pub struct PrivateUserData {
+    data_nascita: String,
+    email: String,
+    cellulare: String
 }
 
 #[derive(Serialize, Deserialize, Debug, DefaultJson, Clone)]
@@ -131,19 +138,37 @@ mod holobook_zome {
     }
 
     #[zome_fn("hc_public")]
-    pub fn create_user_data(nome: String, cognome: String, biografia: String) -> ZomeApiResult<Address> {
-        let user_data = UserData {
+    pub fn create_public_user_data(nome: String, cognome: String, biografia: String) -> ZomeApiResult<Address> {
+        let public_user_data = PublicUserData {
             nome,
             cognome,
             biografia
         };
 
-        let entry = Entry::App("user_data".into(), user_data.into());
+        let entry = Entry::App("public_user_data".into(), public_user_data.into());
         let entry_address = hdk::commit_entry(&entry)?;
 
         let agent_address = hdk::AGENT_ADDRESS.clone().into();
 
-        hdk::link_entries(&agent_address, &entry_address, "user_has_user_data", "")?;
+        hdk::link_entries(&agent_address, &entry_address, "user_has_public_user_data", "")?;
+
+        Ok(entry_address)
+    }
+
+    #[zome_fn("hc_public")]
+    pub fn create_private_user_data(data_nascita: String, email: String, cellulare: String) -> ZomeApiResult<Address> {
+        let private_user_data = PrivateUserData {
+            data_nascita,
+            email,
+            cellulare
+        };
+
+        let entry = Entry::App("private_user_data".into(), private_user_data.into());
+        let entry_address = hdk::commit_entry(&entry)?;
+
+        let agent_address = hdk::AGENT_ADDRESS.clone().into();
+
+        hdk::link_entries(&agent_address, &entry_address, "user_has_private_user_data", "")?;
 
         Ok(entry_address)
     }
@@ -179,10 +204,19 @@ mod holobook_zome {
     }
 
     #[zome_fn("hc_public")]
-    pub fn retrieve_user_data(user_address: Address) -> ZomeApiResult<Vec<UserData>> {
+    pub fn retrieve_public_user_data(user_address: Address) -> ZomeApiResult<Vec<PublicUserData>> {
         hdk::utils::get_links_and_load_type(
             &user_address,
-            LinkMatch::Exactly("user_has_user_data"),
+            LinkMatch::Exactly("user_has_public_user_data"),
+            LinkMatch::Any,
+        )
+    }
+
+    #[zome_fn("hc_public")]
+    pub fn retrieve_private_user_data(user_address: Address) -> ZomeApiResult<Vec<PrivateUserData>> {
+        hdk::utils::get_links_and_load_type(
+            &user_address,
+            LinkMatch::Exactly("user_has_private_user_data"),
             LinkMatch::Any,
         )
     }
@@ -441,22 +475,22 @@ mod holobook_zome {
     }
 
     #[entry_def]
-    fn user_data_entry_def() -> ValidatingEntryType {
+    fn public_user_data_entry_def() -> ValidatingEntryType {
         entry!(
-            name: "user_data",
+            name: "public_user_data",
             description: "User's public informations",
             sharing: Sharing::Public,
             validation_package: || {
                 hdk::ValidationPackageDefinition::Entry
             },
-            validation: | validation_data: hdk::EntryValidationData<UserData>| {
+            validation: | validation_data: hdk::EntryValidationData<PublicUserData>| {
                 match validation_data {
                     hdk::EntryValidationData::Create{ entry, .. } => {
                         const MAX_LENGTH: usize = 140;
                         if entry.biografia.len() <= MAX_LENGTH {
                            Ok(())
                         } else {
-                           Err("Biografia too long".into())
+                           Err("Biografia troppo lunga".into())
                         }
                     },
                     _ => Ok(()),
@@ -465,7 +499,44 @@ mod holobook_zome {
             links: [
                 from!(
                    "%agent_id",
-                   link_type: "user_has_user_data",
+                   link_type: "user_has_public_user_data",
+                   validation_package: || {
+                       hdk::ValidationPackageDefinition::Entry
+                   },
+                   validation: |_validation_data: hdk::LinkValidationData| {
+                       Ok(())
+                   }
+                )
+            ]
+        )
+    }
+
+    #[entry_def]
+    fn private_user_data_entry_def() -> ValidatingEntryType {
+        entry!(
+            name: "private_user_data",
+            description: "User's private informations",
+            sharing: Sharing::Public,
+            validation_package: || {
+                hdk::ValidationPackageDefinition::Entry
+            },
+            validation: | validation_data: hdk::EntryValidationData<PrivateUserData>| {
+                match validation_data {
+                    hdk::EntryValidationData::Create{ entry, .. } => {
+                        const MIN_LENGTH: usize = 1;
+                        if entry.cellulare.len() < MIN_LENGTH {
+                           Err("Numero cellulare troppo breve".into())
+                        } else {
+                           Ok(())
+                        }
+                    },
+                    _ => Ok(()),
+                }
+            },
+            links: [
+                from!(
+                   "%agent_id",
+                   link_type: "user_has_private_user_data",
                    validation_package: || {
                        hdk::ValidationPackageDefinition::Entry
                    },

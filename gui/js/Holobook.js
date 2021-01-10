@@ -80,3 +80,19 @@ Holobook.prototype.create_private_post = function (post_text, timestamp, author_
         });
     });
 }
+
+
+Holobook.prototype.retrieve_user_with_tag = function (user_address, deferred_variable) {
+    holochain_connection.then(({callZome, close}) => {
+        callZome('holobook-instance', 'holobook-main', 'retrieve_user_with_tag')({
+            user_address: user_address
+        }).then(result => {
+            var output = JSON.parse(result);
+            if (output.Ok) {
+                deferred_variable.resolve(output.Ok);
+            } else {
+                deferred_variable.resolve(output.Err.Internal);
+            }
+        });
+    });
+}

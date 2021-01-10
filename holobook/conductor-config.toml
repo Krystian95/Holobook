@@ -3,14 +3,14 @@ persistence_dir = ''
 
 [[agents]]
 id = 'hc-run-agent'
-keystore_file = 'Bob'
-name = 'Bob'
-public_address = 'HcSCi6q54V833PVHd9mckeY33vCHeymwm7wnkM5UwKGnbijrC38eV3FOqqmb7za'
+keystore_file = 'Alice'
+name = 'Alice'
+public_address = 'HcSciaDXrXkqxwv7gukMChvazIuscvcrk457t8n88cmo95en4sPCEdDKvj4ucja'
 test_agent = true
 
 [[dnas]]
 file = 'dist/holobook.dna.json'
-hash = 'QmRFdScRCkmzA1HTNkbNsw1yYHdRz1F5bb3S5KdnJq5jTj'
+hash = 'QmbYMjQprYBGvFAK1ogEJ8QELQiPFZBzrwpURvojkL8wYM'
 id = '__holobook'
 
 [[instances]]
@@ -31,7 +31,7 @@ alias = 'holobook-instance'
 id = '__holobook'
 
 [interfaces.driver]
-port = 50001
+port = 50000
 type = 'websocket'
 
 [[ui_bundles]]
@@ -43,7 +43,7 @@ bind_address = '127.0.0.1'
 bundle = 'holobook_ui'
 dna_interface = 'holobook_ui'
 id = 'holobook_ui'
-port = 8889
+port = 8888
 reroute_to_root = false
 
 [logger]
