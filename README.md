@@ -30,13 +30,19 @@ To execute the application run a shell for the DHT and another shell for each ag
   - ```nix-shell https://holochain.love```
   - ```cd [...]/Holobook/holobook```
   - ```hc run --networked sim2h --agent-name Alice --port 8888```
+  
+  Then visit http://127.0.0.1:8888/
     
 **Bob**
   - ```nix-shell https://holochain.love```
   - ```cd [...]/Holobook/holobook```
   - ```hc run --networked sim2h --agent-name Bob --port 8889```
   
+  Then visit http://127.0.0.1:8889/  
+  
 **Carl**
   - ```nix-shell https://holochain.love```
   - ```cd [...]/Holobook/holobook```
   - ```hc run --networked sim2h --agent-name Carl --port 8890```
+  
+  Then visit http://127.0.0.1:8890/
