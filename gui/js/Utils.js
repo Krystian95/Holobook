@@ -32,7 +32,22 @@ Utils.prototype.retrieve_param_from_url = function (param_name, url) {
 }
 
 Utils.prototype.get_post_element_template = function (text, timestamp, author_nickname, type) {
-    return '<div>' + text + ' (' + this.convert_timestamp_to_datetime(timestamp) + ') - ' + author_nickname + ' [' + type + ']</div>';
+    return '<div class="row mb-4 p-3 border border-light border-1 rounded-3 bg-white">' +
+        '<div class="row">' +
+        '<div class="col">' +
+        author_nickname +
+        ((type == "public") ? '<i class="fa fa-globe icon-public-post"></i>' : '<i class="fa fa-lock icon-private-post"></i>') +
+        '</div>' +
+        '<div class="col">' +
+        this.convert_timestamp_to_datetime(timestamp) +
+        '</div>' +
+        '</div>' +
+        '<div class="row mt-3">' +
+        '<div class="col">' +
+        text +
+        '</div>' +
+        '</div>' +
+        '</div>';
 }
 
 Utils.prototype.display_post = function (result) {

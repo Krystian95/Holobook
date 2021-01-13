@@ -253,12 +253,12 @@ $(document).ready(function () {
                     user_profile_encrypted_password_private_post = output.Ok[0].encrypted_password_private_post;
                     logged_user_has_been_added_by_user_profile = true;
                     if (logged_user_address != profile_user_address) {
-                        $("#logged_user_as_close_friend").text(user_nickname + " ti ha aggiunto come suo Amico più stretto");
+                        $("#logged_user_as_close_friend").html(user_nickname + " ti ha aggiunto come suo amico più stretto <i class='fa fa-check text-success'></i>");
                     }
                 } else {
                     if (logged_user_address != profile_user_address) {
-                        $("#logged_user_as_close_friend").text(user_nickname + " non ti ha aggiunto come suo Amico più stretto");
-                        $("#logged_user_as_close_friend_post_alert").text("Potrai visualizzare i post privati di " + user_nickname + " solo dopo che ti avrà aggiunto come Amico più stretto")
+                        $("#logged_user_as_close_friend").html(user_nickname + " non ti ha aggiunto come suo amico più stretto <i class='fa fa-close text-danger'></i>");
+                        $("#logged_user_as_close_friend_post_alert").html("Visualizzarai i post privati di " + user_nickname + " solo dopo che ti avrà aggiunto come amico più stretto")
                     }
                 }
 

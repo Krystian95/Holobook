@@ -88,7 +88,7 @@ async function display_users(result) {
                 password_private_post = utils.decrypt(user.encrypted_password_private_post, user_keys);
             }
             const url = "../user-profile.html?user_address=" + encodeURI(user.user_address) + "&user_nickname=" + encodeURI(user.nickname);
-            const user_element = '<div><a href="' + url + '">' + user.nickname + '</a></div>';
+            const user_element = '<p><i class="fa fa-user-circle-o text-secondary"></i> <a href="' + url + '" class="btn btn-link">' + user.nickname + '</a></p>';
             $('#users_list').append(user_element);
         }
 

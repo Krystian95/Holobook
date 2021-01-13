@@ -1,9 +1,26 @@
 body {
     background-color: lightgray;
+    padding-bottom: 100px;
 }
 
 .hide {
     display: none;
+}
+
+.icon-private-post{
+    color: var(--bs-danger);
+    padding-left: 7px;
+}
+
+.icon-public-post{
+    color: var(--bs-success);
+    padding-left: 7px;
+}
+
+#user_data .icon-private-post,
+#user_data .icon-public-post {
+    padding-left: 0;
+    padding-right: 10px;
 }
 
 /* Loader */
@@ -13,6 +30,15 @@ body {
     width: 100%;
     position: absolute;
     z-index: 9999;
+    top: 0;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+.btn-link {
+    text-decoration: none !important
 }
 
 .loader-spinner {
@@ -21,7 +47,7 @@ body {
     top: 35%;
     left: 45%;
     position: absolute;
-    border-top: 16px solid #3498db;
+    border-top: 16px solid #0d6efd;
     width: 120px;
     height: 120px;
     -webkit-animation: spin 0.7s linear infinite; /* Safari */
