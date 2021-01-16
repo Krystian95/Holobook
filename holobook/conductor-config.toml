@@ -3,9 +3,9 @@ persistence_dir = ''
 
 [[agents]]
 id = 'hc-run-agent'
-keystore_file = 'Carl'
-name = 'Carl'
-public_address = 'HcSCjooH4KHj3wbzgwinn63VaIDovyfm3w9AMoQ9EHkbcqr4bTkEoA6Jwqjqena'
+keystore_file = 'Bob'
+name = 'Bob'
+public_address = 'HcSCi6q54V833PVHd9mckeY33vCHeymwm7wnkM5UwKGnbijrC38eV3FOqqmb7za'
 test_agent = true
 
 [[dnas]]
@@ -43,7 +43,7 @@ bind_address = '127.0.0.1'
 bundle = 'holobook_ui'
 dna_interface = 'holobook_ui'
 id = 'holobook_ui'
-port = 8890
+port = 8889
 reroute_to_root = false
 
 [logger]

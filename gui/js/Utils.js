@@ -83,6 +83,19 @@ Utils.prototype.generate_keys = function (pass_phrase) {
     return user_keys;
 }
 
+Utils.prototype.setup_agent_id = function (agent_id) {
+    $('#my-profile').attr('title', agent_id);
+}
+
+Utils.prototype.setup_agent_profile_link = function (user_address, nickname) {
+    const url = this.get_profile_link(user_address, nickname)
+    $('#my-profile').attr('href', url);
+}
+
+Utils.prototype.get_profile_link = function (user_address, nickname) {
+    return "../user-profile.html?user_address=" + encodeURI(user_address) + "&user_nickname=" + encodeURI(nickname);
+}
+
 Utils.prototype.encrypt = function (message, receiver_public_key, user_keys) {
     const encryption_result = cryptico.encrypt(String(message), String(receiver_public_key), user_keys);
     console.log(encryption_result);

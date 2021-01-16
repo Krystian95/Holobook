@@ -7,6 +7,28 @@ body {
     display: none;
 }
 
+.icon-reload {
+    cursor: pointer;
+    padding-left: 7px;
+    color: gray;
+}
+
+.toolbar {
+    background-color: #0d6efd;
+    padding: 10px 0;
+    width: 101%!important;
+}
+
+.logo{
+    background-image: url("images/logo_white.png");
+    width: 150px;
+    background: border-box;
+}
+
+.container {
+    padding-top: 100px;
+}
+
 .icon-private-post{
     color: var(--bs-danger);
     padding-left: 7px;
@@ -37,7 +59,7 @@ body {
     text-align: left !important;
 }
 
-.btn-link {
+a {
     text-decoration: none !important
 }
 

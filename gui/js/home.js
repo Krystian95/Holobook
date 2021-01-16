@@ -13,13 +13,17 @@ const dna_address_retrieved = $.Deferred();
 let password_private_post;
 let user_nickname;
 let user_keys;
+let user_address;
+
+const utils = new Utils();
 
 function get_agent_id() {
     const holobook = new Holobook();
     holobook.get_agent_address(holochain_connection, user_address_retrieved);
     $.when(user_address_retrieved).done(function (agent_id) {
         console.log("agent_id = " + agent_id);
-        $('.user_address').text(agent_id);
+        user_address = agent_id;
+        utils.setup_agent_id(agent_id);
     });
 }
 
@@ -87,7 +91,7 @@ async function display_users(result) {
                 user_is_registered = true;
                 password_private_post = utils.decrypt(user.encrypted_password_private_post, user_keys);
             }
-            const url = "../user-profile.html?user_address=" + encodeURI(user.user_address) + "&user_nickname=" + encodeURI(user.nickname);
+            const url = utils.get_profile_link(user.user_address, user.nickname)
             const user_element = '<p><i class="fa fa-user-circle-o text-secondary"></i> <a href="' + url + '" class="btn btn-link">' + user.nickname + '</a></p>';
             $('#users_list').append(user_element);
         }
@@ -101,6 +105,10 @@ async function display_users(result) {
 }
 
 $(document).ready(function () {
+
+    get_agent_id();
+    get_dna_hash();
+
     const utils = new Utils();
 
     const pass_phrase_utente = sessionStorage.getItem("pass_phrase_utente");
@@ -115,19 +123,20 @@ $(document).ready(function () {
     get_agent_nickname();
     $.when(agent_nickname_callback).done(function (result_agent_nickname) {
         user_nickname = result_agent_nickname;
-        $('.user_nickname').text(user_nickname);
-    });
+        $('.logged_user_nickname').text(user_nickname);
+        utils.setup_agent_profile_link(user_address, user_nickname);
 
-    retrieve_users();
-    $.when(retrieve_users_deferred).done(function (registered_users) {
-        $(".loader").hide();
-        const result = JSON.parse(registered_users);
-        if (result.Ok) {
-            display_users(registered_users);
-        } else {
-            console.log(output.Err.Internal);
-        }
-    });
+        retrieve_users();
+        $.when(retrieve_users_deferred).done(function (registered_users) {
+            $(".loader").hide();
+            const result = JSON.parse(registered_users);
+            if (result.Ok) {
+                display_users(registered_users);
+            } else {
+                console.log(output.Err.Internal);
+            }
 
-    retrieve_all_public_posts();
+            retrieve_all_public_posts();
+        });
+    });
 });

@@ -16,15 +16,30 @@
     <div class="loader-spinner"></div>
 </div>
 
-<div class="container">
-    <h1 class="mt-3 mb-2">Holobook</h1>
-
-    <div class="row mb-3">
-        <a class="btn btn-link text-left" href="home.html"><i class="fa fa-arrow-left"></i> Torna alla Home</a>
+<div class="position-relative">
+    <div class="position-absolute top-0 start-0 w-100 toolbar row">
+        <div class="col-1"></div>
+        <div class="col">
+            <a href="home.html">
+                <img class="logo float-start" src="css/images/logo_white.png">
+            </a>
+        </div>
+        <div class="col text-white">
+            <a href="#!" class="float-end pt-1 text-white" id="my-profile" data-bs-toggle="tooltip"
+               data-bs-placement="bottom">
+                <i class="fa fa-user-circle-o"></i> Il mio profilo (<span class="logged_user_nickname"></span>)
+            </a>
+        </div>
+        <div class="col-1"></div>
     </div>
+</div>
 
+<div class="container">
     <div class="row">
         <h3>Profilo di <span class="user_nickname"></span></h3>
+        <div class="row mb-3">
+            <a class="btn btn-link text-left" href="home.html"><i class="fa fa-arrow-left"></i> Torna alla Home</a>
+        </div>
         <div>
             <button type="button" class="hide btn btn-light mb-5 float-start" id="add-as-close-friend">Aggiungi agli amici più stretti
             </button>
@@ -108,7 +123,7 @@
             </div>
         </div>
         <div class="col">
-            <h3 class="mb-4">Post</h3>
+            <h3 class="mb-4">Post <i class="fa fa-refresh icon-reload" onClick="window.location.reload();"></i></h3>
             <span id="logged_user_as_close_friend_post_alert" class="d-block pb-3"></span>
             <div id="posts">
                 <p>Nessun post da mostrare al momento</p>

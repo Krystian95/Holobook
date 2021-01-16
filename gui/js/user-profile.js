@@ -12,6 +12,7 @@ let private_user_data_retrieved = $.Deferred();
 let close_friend_retrieved = $.Deferred();
 let retrieve_user_profile_registered_entry_deferred = $.Deferred();
 let user_is_registered_deferred = $.Deferred();
+const agent_nickname_deferred = $.Deferred();
 
 let logged_user_address;
 let user_nickname;
@@ -217,6 +218,14 @@ $(document).ready(function () {
             if (registered_user.length == 0) {
                 console.log("User is not registered");
                 window.location.href = 'index.html';
+            } else {
+                holobook.get_agent_nickname(holochain_connection, agent_nickname_deferred);
+                $.when(agent_nickname_deferred).done(function (logged_agent_nickname) {
+                    console.log("Logged agent nickname = " + logged_agent_nickname);
+                    $('.logged_user_nickname').html(logged_agent_nickname);
+                    utils.setup_agent_id(logged_user_address);
+                    utils.setup_agent_profile_link(logged_user_address, logged_agent_nickname);
+                });
             }
         });
 
