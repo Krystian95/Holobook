@@ -2,19 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0c2adec3-e32e-4641-b0cb-141f39e1c8cc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/gui/css/images/logo_white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/favicon.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/css/default.css" beforeDir="false" afterPath="$PROJECT_DIR$/gui/css/default.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/gui/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/gui/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/js/Holobook.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/Holobook.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/js/Utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/Utils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/js/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/home.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/js/user-profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/gui/js/user-profile.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/user-profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/gui/user-profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/holobook/bundle.toml" beforeDir="false" afterPath="$PROJECT_DIR$/holobook/bundle.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/holobook/conductor-config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/holobook/conductor-config.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/holobook/zomes/holobook-main/code/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/holobook/zomes/holobook-main/code/src/lib.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,7 +108,8 @@
       <workItem from="1610390974418" duration="576000" />
       <workItem from="1610476220586" duration="5203000" />
       <workItem from="1610563401492" duration="4412000" />
-      <workItem from="1610820774708" duration="4108000" />
+      <workItem from="1610820774708" duration="4443000" />
+      <workItem from="1610910853984" duration="1346000" />
     </task>
     <servers />
   </component>

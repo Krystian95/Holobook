@@ -402,11 +402,11 @@ mod holobook_zome {
             validation: | validation_data: hdk::EntryValidationData<Post>| {
                 match validation_data {
                     hdk::EntryValidationData::Create{ entry, .. } => {
-                        const MAX_LENGTH: usize = 140;
+                        const MAX_LENGTH: usize = 2000;
                         if entry.text.len() <= MAX_LENGTH {
                            Ok(())
                         } else {
-                           Err("Post too long".into())
+                           Err("Public post too long".into())
                         }
                     },
                     _ => Ok(()),
@@ -449,11 +449,11 @@ mod holobook_zome {
             validation: | validation_data: hdk::EntryValidationData<Post>| {
                 match validation_data {
                     hdk::EntryValidationData::Create{ entry, .. } => {
-                        const MAX_LENGTH: usize = 140;
+                        const MAX_LENGTH: usize = 2000;
                         if entry.text.len() <= MAX_LENGTH {
                            Ok(())
                         } else {
-                           Err("Post too long".into())
+                           Err("Private post too long".into())
                         }
                     },
                     _ => Ok(()),

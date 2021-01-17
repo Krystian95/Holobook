@@ -69,7 +69,9 @@ $('form[name="user-data-form"]').submit(function (e) {
     console.log("Private data encrypted: " + encrypted_data_nascita + " " + encrypted_email + " " + encrypted_cellulare);
 
     create_public_user_data(nome, cognome, biografia);
-    create_private_user_data(encrypted_data_nascita, encrypted_email, encrypted_cellulare);
+    setTimeout(() => {
+        create_private_user_data(encrypted_data_nascita, encrypted_email, encrypted_cellulare);
+    }, 2000);
 });
 
 function retrieve_public_user_data(user_address) {
@@ -232,7 +234,7 @@ $(document).ready(function () {
         if (logged_user_address == profile_user_address) {
             const logged_user_encrypted_password_private_post = sessionStorage.getItem("encrypted_password_private_post");
             password_private_post = utils.decrypt(logged_user_encrypted_password_private_post, user_keys);
-            $("#post-form").show();
+            $(".post-form").show();
         }
 
         var relationship_logged_user_has_added_user_profile = logged_user_address + "->" + profile_user_address;
@@ -301,6 +303,13 @@ $(document).ready(function () {
                         all_posts.Ok.push(post);
                     });
 
+                    console.log("logged_user_has_been_added_by_user_profile");
+                    console.log(logged_user_has_been_added_by_user_profile);
+                    console.log("logged_user_address");
+                    console.log(logged_user_address);
+                    console.log("profile_user_address");
+                    console.log(profile_user_address);
+
                     if (logged_user_has_been_added_by_user_profile || logged_user_address == profile_user_address) {
                         if (logged_user_address == profile_user_address) {
                             const logged_user_encrypted_password_private_post = sessionStorage.getItem("encrypted_password_private_post");
@@ -336,6 +345,8 @@ $(document).ready(function () {
                         retrieve_user_private_posts(profile_user_address);
                         $.when(private_posts_retrieved).done(function (private_posts) {
                             const output_private_posts = JSON.parse(private_posts);
+                            console.log("private_posts");
+                            console.log(private_posts);
                             if (output_private_posts.Ok.length > 0) {
                                 console.log("password_private_post");
                                 console.log(password_private_post);
